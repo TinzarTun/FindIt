@@ -1,0 +1,265 @@
+<!-- Main Content -->
+<main class="min-h-screen flex">
+  <!-- Left Side - Registration Form -->
+  <div
+    class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50 animate-slide-in-left"
+  >
+    <div class="max-w-md w-full">
+      <!-- Form Header -->
+      <div class="text-center mb-8">
+        <div class="lg:hidden flex justify-center mb-6">
+          <div
+            class="w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-xl"
+          >
+            <i data-lucide="user-plus" class="h-8 w-8 text-white"></i>
+          </div>
+        </div>
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Join FindIt</h2>
+        <p class="text-gray-600">Create your account and start connecting</p>
+      </div>
+
+      <!-- Registration Form -->
+      <div
+        class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-8 shadow-2xl"
+      >
+        <form class="space-y-5" action="#" method="POST">
+          <!-- Name Field -->
+          <div class="relative group">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+            >
+              <i
+                data-lucide="user"
+                class="h-5 w-5 text-gray-400 group-focus-within:text-primary-500 transition-colors"
+              ></i>
+            </div>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+              placeholder="Full name"
+            />
+          </div>
+
+          <!-- Email Field -->
+          <div class="relative group">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+            >
+              <i
+                data-lucide="mail"
+                class="h-5 w-5 text-gray-400 group-focus-within:text-primary-500 transition-colors"
+              ></i>
+            </div>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+              placeholder="Email address"
+            />
+          </div>
+
+          <!-- Password Field -->
+          <div class="relative group">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+            >
+              <i
+                data-lucide="lock"
+                class="h-5 w-5 text-gray-400 group-focus-within:text-primary-500 transition-colors"
+              ></i>
+            </div>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              required
+              class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+              placeholder="Password"
+            />
+            <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+              <button
+                type="button"
+                id="togglePassword"
+                class="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+              >
+                <i data-lucide="eye" class="h-5 w-5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="relative group">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+            >
+              <i
+                data-lucide="shield-check"
+                class="h-5 w-5 text-gray-400 group-focus-within:text-primary-500 transition-colors"
+              ></i>
+            </div>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              autocomplete="new-password"
+              required
+              class="block w-full pl-12 pr-12 py-4 bg-white border border-gray-300 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+              placeholder="Confirm password"
+            />
+            <div class="absolute inset-y-0 right-0 pr-4 flex items-center">
+              <button
+                type="button"
+                id="toggleConfirmPassword"
+                class="text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+              >
+                <i data-lucide="eye" class="h-5 w-5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Terms and Conditions -->
+          <div class="flex items-start">
+            <input
+              id="terms"
+              name="terms"
+              type="checkbox"
+              required
+              class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded mt-1"
+            />
+            <label
+              for="terms"
+              class="ml-3 block text-sm text-gray-700 leading-5"
+            >
+              I agree to the
+              <a
+                href="#"
+                class="font-medium text-primary-600 hover:text-primary-500 transition-colors"
+                >Terms of Service</a
+              >
+              and
+              <a
+                href="#"
+                class="font-medium text-primary-600 hover:text-primary-500 transition-colors"
+                >Privacy Policy</a
+              >
+            </label>
+          </div>
+
+          <!-- Create Account Button -->
+          <button
+            type="submit"
+            class="group relative w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200 shadow-lg"
+          >
+            <i
+              data-lucide="user-plus"
+              class="h-5 w-5 mr-2 group-hover:scale-110 transition-transform"
+            ></i>
+            Create Account
+          </button>
+        </form>
+
+        <!-- Sign In Link -->
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-600">
+            Already have an account?
+            <a
+              href="login.html"
+              class="font-semibold text-primary-600 hover:text-primary-500 transition-colors"
+            >
+              Sign in here
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side - Branding -->
+  <div
+    class="hidden lg:flex lg:w-1/2 bg-gradient-to-bl from-primary-500 via-primary-600 to-indigo-700 relative overflow-hidden animate-slide-in-right items-center justify-center"
+  >
+    <!-- Synchronized Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+      <div
+        class="absolute top-16 left-16 w-32 h-32 bg-white rounded-full animate-float"
+      ></div>
+      <div
+        class="absolute top-32 right-24 w-24 h-24 bg-white rounded-full animate-float-delayed"
+        style="animation-delay: 1.5s"
+      ></div>
+      <div
+        class="absolute top-64 left-32 w-20 h-20 bg-white rounded-full animate-float"
+        style="animation-delay: 3s"
+      ></div>
+      <div
+        class="absolute bottom-32 right-16 w-28 h-28 bg-white rounded-full animate-float-delayed"
+        style="animation-delay: 0.5s"
+      ></div>
+      <div
+        class="absolute bottom-48 left-20 w-16 h-16 bg-white rounded-full animate-float"
+        style="animation-delay: 2s"
+      ></div>
+      <div
+        class="absolute top-48 right-40 w-12 h-12 bg-white rounded-full animate-float-delayed"
+        style="animation-delay: 4s"
+      ></div>
+    </div>
+
+    <div
+      class="flex flex-col justify-center items-center text-center text-white p-12 relative z-10"
+    >
+      <div class="mb-8 animate-glow">
+        <i data-lucide="users" class="h-24 w-24 text-white"></i>
+      </div>
+      <h1 class="text-4xl font-bold mb-4">Join Our Community</h1>
+      <p class="text-xl text-blue-100 mb-8 max-w-md">
+        Be part of Myanmar's largest lost and found community. Help others while
+        finding your own lost items.
+      </p>
+
+      <!-- Features List -->
+      <div class="space-y-4 text-left">
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="check" class="h-4 w-4 text-white"></i>
+          </div>
+          <span class="text-blue-100">Post lost & found items instantly</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="check" class="h-4 w-4 text-white"></i>
+          </div>
+          <span class="text-blue-100">Connect with your local community</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="check" class="h-4 w-4 text-white"></i>
+          </div>
+          <span class="text-blue-100">Get notified about matching items</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center"
+          >
+            <i data-lucide="check" class="h-4 w-4 text-white"></i>
+          </div>
+          <span class="text-blue-100">Safe and secure platform</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
