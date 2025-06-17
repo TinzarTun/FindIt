@@ -22,7 +22,14 @@
       <div
         class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-8 shadow-2xl"
       >
-        <form class="space-y-5" action="#" method="POST">
+        <% if (typeof error !== 'undefined' && error) { %>
+        <div
+          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+        >
+          <%= error %>
+        </div>
+        <% } %>
+        <form class="space-y-5" action="/auth/register" method="POST">
           <!-- Name Field -->
           <div class="relative group">
             <div
@@ -171,7 +178,7 @@
           <p class="text-sm text-gray-600">
             Already have an account?
             <a
-              href="login.html"
+              href="/auth/login"
               class="font-semibold text-primary-600 hover:text-primary-500 transition-colors"
             >
               Sign in here
