@@ -3,11 +3,17 @@ const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
 
 exports.getRegister = (_, res) => {
-  res.render("auth/register", { title: "Register" });
+  res.render("auth/register", { title: "Register", error: null });
 };
 
 exports.postRegister = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
+  if (password !== confirmPassword) {
+    return res.status(400).render("auth/register", {
+      title: "Register",
+      error: "Password and Confirm Password do not match",
+    });
+  }
   try {
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -30,7 +36,7 @@ exports.postRegister = async (req, res) => {
 };
 
 exports.getLogin = (req, res) => {
-  res.render("auth/login", { title: "login" });
+  res.render("auth/login", { title: "login", error: null });
 };
 
 exports.postLogin = async (req, res) => {
@@ -42,10 +48,16 @@ exports.postLogin = async (req, res) => {
       error: "Email not found",
     });
   }
-  if (user && (await bcrypt.compare(password, user.password))) {
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(401).render("auth/login", {
+      title: "login",
+      error: "Incorrect password",
+    });
+  }
+  if (user && isMatch) {
     req.session.userId = user.id;
     req.session.name = user.name;
-    req.session.role = "Super Admin";
     return res.redirect("/");
   }
   res.redirect("/auth/login");
