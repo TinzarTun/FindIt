@@ -26,6 +26,7 @@ app.use(
 app.use(expressLayouts); // layout.ejs
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId; // pass userId to ejs
+  res.locals.role = req.session.role; // pass role to ejs
   next();
 });
 

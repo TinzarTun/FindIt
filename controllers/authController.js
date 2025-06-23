@@ -24,9 +24,25 @@ exports.postRegister = async (req, res) => {
         error: "Email already in use",
       });
     }
+    // Find the User role
+    const userRole = await prisma.role.findUnique({
+      where: { name: "User" },
+    });
+
+    if (!userRole) {
+      return res.status(500).render("auth/register", {
+        title: "Register",
+        error: "User role not found. Please contact admin.",
+      });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     await prisma.user.create({
-      data: { name, email, password: hashedPassword },
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role: { connect: { id: userRole.id } },
+      },
     });
     res.redirect("/auth/login");
   } catch (error) {
@@ -41,7 +57,10 @@ exports.getLogin = (req, res) => {
 
 exports.postLogin = async (req, res) => {
   const { email, password } = req.body;
-  const user = await prisma.user.findUnique({ where: { email } });
+  const user = await prisma.user.findUnique({
+    where: { email },
+    include: { role: true },
+  });
   if (!user) {
     return res.status(401).render("auth/login", {
       title: "login",
@@ -58,9 +77,15 @@ exports.postLogin = async (req, res) => {
   if (user && isMatch) {
     req.session.userId = user.id;
     req.session.name = user.name;
+    req.session.role = user.role.name;
     return res.redirect("/");
   }
-  res.redirect("/auth/login");
+  // Redirect based on role
+  if (user.role.name === "Admin") {
+    return res.redirect("/index.html");
+  } else {
+    return res.redirect("/auth/login");
+  }
 };
 
 exports.logout = (req, res) => {

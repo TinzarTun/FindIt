@@ -20,6 +20,8 @@ model User {
   city      String?
   region    String?
   country   String?  @default("Myanmar")
+  roleId    String   @db.ObjectId
+  role      Role     @relation(fields: [roleId], references: [id])
   isDefault Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,7 +37,9 @@ model LostItem {
   id           String     @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   description  String
-  category     CategoryType
+  categoryId   String     @db.ObjectId
+  category     CategoryType @relation(fields: [categoryId], references: [id])
+  featured     Boolean    @default(false)
   lostDate     DateTime
   lostLocation String
   reward       Float?
@@ -55,7 +59,8 @@ model FoundItem {
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String
-  category      CategoryType
+  categoryId   String     @db.ObjectId
+  category     CategoryType @relation(fields: [categoryId], references: [id])
   foundDate     DateTime
   foundLocation String
   images        String[]
@@ -111,6 +116,48 @@ model Notification {
   user      User             @relation(fields: [userId], references: [id])
 }
 
+model Role {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String     @unique
+  description String?
+  permissions RolePermission[]
+  users       User[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Permission {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   @unique
+  description String?
+  roles       RolePermission[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model RolePermission {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  roleId       String      @db.ObjectId
+  permissionId String      @db.ObjectId
+
+  role         Role        @relation(fields: [roleId], references: [id])
+  permission   Permission  @relation(fields: [permissionId], references: [id])
+
+  createdAt    DateTime    @default(now())
+}
+
+model CategoryType {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   @unique
+  description String?
+  isAlive     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  lostItems   LostItem[]
+  foundItems  FoundItem[]
+}
+
 enum ItemStatus {
   LOST
   FOUND
@@ -134,29 +181,6 @@ enum NotificationType {
   ITEM_MATCHED
   PASSWORD_CHANGED
   ACCOUNT_VERIFIED
-}
-
-enum CategoryType {
-  ELECTRONICS
-  DOCUMENTS
-  CLOTHING
-  JEWELRY
-  PETS
-  VEHICLES
-  BAGS
-  KEYS
-  WALLET
-  EYEWEAR
-  BOOKS
-  TOYS
-  SPORTS_EQUIPMENT
-  HOME_APPLIANCES
-  MEDICAL_ITEMS
-  STATIONERY
-  GADGETS
-  CASH
-  ACCESSORIES
-  OTHER
 }
 
 // npx prisma init
