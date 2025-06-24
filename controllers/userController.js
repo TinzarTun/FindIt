@@ -46,8 +46,8 @@ exports.getuser = async (req, res) => {
     const formattedPhone = formatPhone(user.phone);
 
     // calculate profile completion %
-    let progress = 0;
-
+    const hasName =
+      user.name && user.name.trim() !== "-" && user.name.trim() !== "";
     const hasEmail =
       user.email && user.email.trim() !== "-" && user.email.trim() !== "";
     const hasPhone =
@@ -58,28 +58,28 @@ exports.getuser = async (req, res) => {
       user.city && user.city.trim() !== "-" && user.city.trim() !== "";
     const hasRegion =
       user.region && user.region.trim() !== "-" && user.region.trim() !== "";
+    const hasCountry =
+      user.country && user.country.trim() !== "-" && user.country.trim() !== "";
 
-    if (hasEmail) {
-      progress = 33;
-    }
+    const totalFields = 7;
+    const filledFields = [
+      hasName,
+      hasEmail,
+      hasPhone,
+      hasAddress,
+      hasCity,
+      hasRegion,
+      hasCountry,
+    ].filter(Boolean).length;
 
-    if (hasEmail && hasPhone) {
-      progress = 66;
-    }
+    // Calculate raw progress
+    let progress = (filledFields / totalFields) * 100;
 
-    if (hasEmail && hasPhone && hasAddress && hasCity && hasRegion) {
-      progress = 100;
+    // Round to nearest 5
+    progress = Math.round(progress / 5) * 5;
 
-      if (!user.verified) {
-        // update verified
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { verified: true },
-        });
-
-        user.verified = true;
-      }
-    }
+    // Between 0 and 100
+    progress = Math.max(0, Math.min(100, progress));
 
     res.render("user/profile", {
       user,

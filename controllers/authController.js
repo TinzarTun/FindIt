@@ -41,6 +41,8 @@ exports.postRegister = async (req, res) => {
         name,
         email,
         password: hashedPassword,
+        verified: true,
+        isDefault: true,
         role: { connect: { id: userRole.id } },
       },
     });
@@ -78,14 +80,14 @@ exports.postLogin = async (req, res) => {
     req.session.userId = user.id;
     req.session.name = user.name;
     req.session.role = user.role.name;
-    return res.redirect("/");
+    // Redirect based on role
+    if (user.role.name === "Admin") {
+      return res.redirect("/index.html");
+    } else {
+      return res.redirect("/");
+    }
   }
-  // Redirect based on role
-  if (user.role.name === "Admin") {
-    return res.redirect("/index.html");
-  } else {
-    return res.redirect("/auth/login");
-  }
+  return res.redirect("/auth/login");
 };
 
 exports.logout = (req, res) => {
