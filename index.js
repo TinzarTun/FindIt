@@ -6,6 +6,7 @@ const expressLayouts = require("express-ejs-layouts");
 
 const authMiddleware = require("./middlewares/authMiddleware");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 // const lostItemRoutes = require("./routes/lostItemRoutes");
 // const foundItemRoutes = require("./routes/foundItemRoutes");
 // const claimRoutes = require("./routes/claimRoutes");
@@ -25,11 +26,13 @@ app.use(
 app.use(expressLayouts); // layout.ejs
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId; // pass userId to ejs
+  res.locals.role = req.session.role; // pass role to ejs
   next();
 });
 
 app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
+app.use("/user", authMiddleware, userRoutes);
 // app.use("/lost", authMiddleware, lostItemRoutes);
 // app.use("/found", authMiddleware, foundItemRoutes);
 // app.use("/claim", authMiddleware, claimRoutes);

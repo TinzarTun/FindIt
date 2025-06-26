@@ -28,6 +28,9 @@
               glow: "glow 2s ease-in-out infinite alternate",
               "slide-in-left": "slideInLeft 0.8s ease-out",
               "slide-in-right": "slideInRight 0.8s ease-out",
+              "fade-in": "fadeIn 0.6s ease-out",
+              "scale-in": "scaleIn 0.5s ease-out",
+              "pulse-slow": "pulse 3s ease-in-out infinite",
             },
             keyframes: {
               float: {
@@ -45,6 +48,14 @@
               slideInRight: {
                 "0%": { transform: "translateX(100%)", opacity: "0" },
                 "100%": { transform: "translateX(0)", opacity: "1" },
+              },
+              fadeIn: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              scaleIn: {
+                "0%": { opacity: "0", transform: "scale(0.9)" },
+                "100%": { opacity: "1", transform: "scale(1)" },
               },
             },
           },
@@ -131,7 +142,7 @@
                 <div class="py-1" role="none">
                   <% if (userId) { %>
                   <a
-                    href="#"
+                    href="/user/profile"
                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                     role="menuitem"
                   >
@@ -140,6 +151,17 @@
                       class="h-4 w-4 mr-3 text-gray-400"
                     ></i>
                     Profile
+                  </a>
+                  <a
+                    href="history.html"
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    role="menuitem"
+                  >
+                    <i
+                      data-lucide="history"
+                      class="h-4 w-4 mr-3 text-gray-400"
+                    ></i>
+                    History
                   </a>
                   <a
                     href="/auth/logout"
@@ -179,6 +201,44 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <!-- Mobile menu button -->
+          <div class="md:hidden">
+            <button
+              id="mobileMenuButton"
+              class="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <i data-lucide="menu" class="h-5 w-5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="hidden md:hidden">
+          <div
+            class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200"
+          >
+            <a
+              href="/"
+              class="text-gray-500 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+              >Home</a
+            >
+            <a
+              href="#"
+              class="text-gray-500 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+              >Lost Items</a
+            >
+            <a
+              href="#"
+              class="text-gray-500 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+              >Found Items</a
+            >
+            <a
+              href="#"
+              class="text-gray-500 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors"
+              >Categories</a
+            >
           </div>
         </div>
       </nav>
@@ -326,68 +386,6 @@
       </div>
     </footer>
 
-    <script>
-      // Initialize Lucide icons
-      lucide.createIcons();
-
-      // Dropdown functionality
-      document.addEventListener("DOMContentLoaded", function () {
-        const userMenuButton = document.getElementById("userMenuButton");
-        const userDropdown = document.getElementById("userDropdown");
-
-        // Toggle dropdown on button click
-        userMenuButton.addEventListener("click", function (e) {
-          e.stopPropagation();
-          const isHidden = userDropdown.classList.contains("hidden");
-
-          if (isHidden) {
-            userDropdown.classList.remove("hidden");
-            userMenuButton.setAttribute("aria-expanded", "true");
-          } else {
-            userDropdown.classList.add("hidden");
-            userMenuButton.setAttribute("aria-expanded", "false");
-          }
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener("click", function (e) {
-          if (
-            !userMenuButton.contains(e.target) &&
-            !userDropdown.contains(e.target)
-          ) {
-            userDropdown.classList.add("hidden");
-            userMenuButton.setAttribute("aria-expanded", "false");
-          }
-        });
-
-        // Close dropdown on escape key
-        document.addEventListener("keydown", function (e) {
-          if (e.key === "Escape") {
-            userDropdown.classList.add("hidden");
-            userMenuButton.setAttribute("aria-expanded", "false");
-          }
-        });
-
-        // Password toggle functionality
-        const togglePassword = document.getElementById("togglePassword");
-        const passwordInput = document.getElementById("password");
-
-        togglePassword.addEventListener("click", function () {
-          const type =
-            passwordInput.getAttribute("type") === "password"
-              ? "text"
-              : "password";
-          passwordInput.setAttribute("type", type);
-
-          const icon = this.querySelector("i");
-          if (type === "password") {
-            icon.setAttribute("data-lucide", "eye");
-          } else {
-            icon.setAttribute("data-lucide", "eye-off");
-          }
-          lucide.createIcons();
-        });
-      });
-    </script>
+    <script src="/js/user.js"></script>
   </body>
 </html>
