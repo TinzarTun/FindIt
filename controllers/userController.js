@@ -183,17 +183,46 @@ exports.editUserInfo = async (req, res) => {
   }
 };
 
+const fs = require("fs");
+const path = require("path");
+
 exports.delete = async (req, res) => {
   const { id } = req.params;
 
   if (req.session.userId !== id) {
     return res.status(403).json({ error: "Unauthorized" });
   }
+
   try {
-    await prisma.user.delete({
-      where: { id: req.params.id },
+    const user = await prisma.user.findUnique({
+      where: { id },
     });
-    res.redirect("/");
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Delete avatar if it exists
+    if (user.avatar) {
+      const avatarPath = path.join(__dirname, "../public/avatar", user.avatar);
+      if (fs.existsSync(avatarPath)) {
+        fs.unlinkSync(avatarPath);
+      }
+    }
+
+    // Delete user from DB
+    await prisma.user.delete({
+      where: { id },
+    });
+
+    // Destroy session after deletion
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Session destruction error:", err);
+        return res.status(500).send("Failed to log out after deletion");
+      }
+      res.redirect("/");
+    });
   } catch (error) {
     console.error("Error deleting user:", error);
     res.status(500).send("Internal Server Error");
