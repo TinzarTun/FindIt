@@ -29,13 +29,6 @@
                 class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white shadow-lg bg-gray-100"
               />
               <% } %>
-              <!-- Camera Icon Overlay -->
-              <button
-                onclick="openImageModal()"
-                class="absolute bottom-0 right-0 w-8 h-8 sm:w-10 sm:h-10 bg-primary-600 hover:bg-primary-700 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 group-hover:scale-110"
-              >
-                <i data-lucide="camera" class="h-4 w-4 sm:h-5 sm:w-5"></i>
-              </button>
             </div>
             <!-- User Info -->
             <div class="text-center sm:text-left">
@@ -74,13 +67,13 @@
           </div>
           <!-- Edit Button -->
           <div>
-            <button
-              onclick="openEditModal()"
+            <a
+              href="/user/edit/<%= user.id %>"
               class="block sm:inline sm:mx-0 mx-auto bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-2.5 rounded-xl hover:from-primary-700 hover:to-primary-800 hover:shadow-lg transform hover:scale-105 transition-all duration-200 font-medium"
             >
               <i data-lucide="edit-3" class="h-4 w-4 mr-2 inline"></i>
               Edit Profile
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -468,7 +461,7 @@
       </button>
     </div>
     <div class="px-6 py-6">
-      <form class="space-y-6">
+      <form action="/user/edit/<%= user.id %>" method="POST" class="space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2"
@@ -476,8 +469,10 @@
             >
             <input
               type="text"
-              value="John Doe"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              name="name"
+              value="<%= user.name %>"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              required
             />
           </div>
           <div>
@@ -486,51 +481,58 @@
             >
             <input
               type="email"
-              value="john.doe@example.com"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              name="email"
+              value="<%= user.email %>"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              required
             />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2"
               >Phone</label
             >
-            <input
-              type="tel"
-              value="+95 9 123 456 789"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            <input type="tel" name="phone" value="<%= user.phone ?
+            `+95${user.phone.slice(1)}` : "" %>" class="w-full px-4 py-3 border
+            border-gray-300 rounded-lg focus:outline-none focus:ring-2
+            focus:ring-primary-500 focus:border-primary-500 transition-colors"
             />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2"
               >Country</label
             >
-            <select
+            <input
+              type="text"
+              name="country"
+              value="<%= user.country %>"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors cursor-not-allowed"
+              disabled
+            />
+            <!-- <select
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
             >
               <option>Myanmar</option>
               <option>Thailand</option>
               <option>Singapore</option>
-            </select>
+            </select> -->
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2"
               >Region/State</label
             >
-            <input
-              type="text"
-              value="Yangon"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-            />
+            <input type="text" name="region" value="<%= user.region || "" %>"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg
+            focus:outline-none focus:ring-2 focus:ring-primary-500
+            focus:border-primary-500 transition-colors" />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2"
               >City</label
             >
-            <input
-              type="text"
-              value="Yangon"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-            />
+            <input type="text" name="city" value="<%= user.city || "" %>"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg
+            focus:outline-none focus:ring-2 focus:ring-primary-500
+            focus:border-primary-500 transition-colors" />
           </div>
         </div>
         <div>
@@ -539,9 +541,9 @@
           >
           <textarea
             rows="3"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
           >
-123 Main Street, Downtown, Yangon</textarea
+<%= user.address || "" %></textarea
           >
         </div>
         <div class="flex justify-end space-x-4 pt-4">
@@ -788,5 +790,3 @@
     </div>
   </div>
 </div>
-
-

@@ -118,7 +118,7 @@ function confirmDeleteAccount() {
     "Are you sure you want to permanently delete your account? This action cannot be undone.",
     function () {
       alert("Account deletion requested...");
-      // Add account deletion logic here
+      window.location.href = "/user/delete/:id"; // delete account
       closeConfirmModal();
     }
   );

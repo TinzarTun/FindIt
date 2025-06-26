@@ -2,7 +2,7 @@ const session = require("express-session");
 const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
 
-exports.getuser = async (req, res) => {
+exports.getUser = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.session.userId },
@@ -91,5 +91,111 @@ exports.getuser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
+  }
+};
+
+exports.getEditUser = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.params.id },
+    });
+    if (!user || user.id !== req.session.userId) {
+      return res.redirect("/profile");
+    }
+    res.render("user/edit", { user, title: "user edit" });
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+exports.editUserInfo = async (req, res) => {
+  const { id } = req.params;
+
+  if (req.session.userId !== id) {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const { name, email, phone, address, city, region, country } = req.body;
+    // Get current user to access existing avatar
+    const existingUser = await prisma.user.findUnique({ where: { id } });
+    // const avatar = req.file ? req.file.filename : existingUser.avatar;
+    let avatar = existingUser.avatar;
+
+    if (req.file) {
+      // Delete old avatar file if it exists
+      const fs = require("fs");
+      const path = require("path");
+
+      const oldAvatarPath = path.join(
+        __dirname,
+        "../public/avatar",
+        existingUser.avatar
+      );
+
+      // Check if file exists before deleting
+      if (existingUser.avatar && fs.existsSync(oldAvatarPath)) {
+        fs.unlinkSync(oldAvatarPath); // Delete old file
+      }
+
+      avatar = req.file.filename; // Set new filename
+    }
+
+    let normalizedPhone = "";
+
+    if (phone && phone.trim() !== "") {
+      normalizedPhone = phone.trim().replace(/[^\d+]/g, "");
+
+      if (/^09\d{7,10}$/.test(normalizedPhone)) {
+        // already valid
+      } else if (/^959\d{7,10}$/.test(normalizedPhone)) {
+        normalizedPhone = "0" + normalizedPhone.slice(2);
+      } else if (/^\+959\d{7,10}$/.test(normalizedPhone)) {
+        normalizedPhone = "0" + normalizedPhone.slice(3);
+      } else {
+        return res.status(400).send("Invalid phone number format");
+      }
+    }
+
+    const updateData = {
+      name,
+      email,
+      phone: normalizedPhone,
+      address,
+      city,
+      region,
+      country,
+    };
+
+    if (avatar) {
+      updateData.avatar = avatar;
+    }
+
+    await prisma.user.update({
+      where: { id },
+      data: updateData,
+    });
+    res.redirect("/user/profile");
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+exports.delete = async (req, res) => {
+  const { id } = req.params;
+
+  if (req.session.userId !== id) {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+  try {
+    await prisma.user.delete({
+      where: { id: req.params.id },
+    });
+    res.redirect("/");
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
