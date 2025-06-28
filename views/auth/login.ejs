@@ -85,9 +85,20 @@
       >
         <% if (typeof error !== 'undefined' && error) { %>
         <div
-          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+          id="errorBox"
+          class="flex items-center justify-between bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 relative"
         >
-          <%= error %>
+          <p class="text-sm sm:text-base"><%= error %></p>
+
+          <!-- Close Button -->
+          <button
+            type="button"
+            onclick="document.getElementById('errorBox').remove()"
+            class="ml-4 text-red-500 hover:text-red-700 text-lg font-normal leading-none"
+            aria-label="Close"
+          >
+            &times;
+          </button>
         </div>
         <% } %>
 

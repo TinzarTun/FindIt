@@ -11,12 +11,13 @@
     <!-- Display Error Message -->
     <% if (error) { %>
     <div
-      class="mb-6 px-4 sm:px-6 py-3 bg-red-100 border border-red-400 text-red-700 rounded-lg animate-fade-in text-sm sm:text-base relative"
       id="errorBox"
+      class="mb-6 px-4 sm:px-6 py-3 bg-red-100 border border-red-400 text-red-700 rounded-lg animate-fade-in text-sm sm:text-base flex items-start justify-between relative"
     >
-      <div class="flex items-start space-x-2">
+      <!-- Left: Icon + Message -->
+      <div class="flex items-start space-x-2 pr-8">
         <svg
-          class="w-5 h-5 mt-1 flex-shrink-0 text-red-500"
+          class="w-5 h-5 mt-0.5 flex-shrink-0 text-red-500"
           fill="none"
           stroke="currentColor"
           stroke-width="2"
@@ -34,10 +35,12 @@
         </div>
       </div>
 
-      <!-- Close button -->
+      <!-- Close Button -->
       <button
+        type="button"
         onclick="document.getElementById('errorBox').remove()"
-        class="absolute top-2 right-2 text-red-600 hover:text-red-800 text-lg"
+        class="absolute top-2 right-3 text-red-600 hover:text-red-800 text-base font-normal"
+        aria-label="Close"
       >
         &times;
       </button>
