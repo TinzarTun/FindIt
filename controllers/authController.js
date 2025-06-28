@@ -54,7 +54,7 @@ exports.postRegister = async (req, res) => {
 };
 
 exports.getLogin = (req, res) => {
-  res.render("auth/login", { title: "login", error: null });
+  res.render("auth/login", { title: "Login", error: null });
 };
 
 exports.postLogin = async (req, res) => {
@@ -65,14 +65,14 @@ exports.postLogin = async (req, res) => {
   });
   if (!user) {
     return res.status(401).render("auth/login", {
-      title: "login",
+      title: "Login",
       error: "Email not found",
     });
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
     return res.status(401).render("auth/login", {
-      title: "login",
+      title: "Login",
       error: "Incorrect password",
     });
   }

@@ -86,7 +86,7 @@ exports.getUser = async (req, res) => {
       formattedDate,
       formattedPhone,
       progress,
-      title: "profile",
+      title: "Profile",
     });
   } catch (error) {
     console.error(error);
@@ -102,7 +102,7 @@ exports.getEditUser = async (req, res) => {
     if (!user || user.id !== req.session.userId) {
       return res.redirect("/profile");
     }
-    res.render("user/edit", { user, title: "user edit" });
+    res.render("user/edit", { user, title: "Edit Profile", error: null });
   } catch (error) {
     console.error("Error fetching user:", error);
     res.status(500).send("Internal Server Error");
@@ -124,22 +124,36 @@ exports.editUserInfo = async (req, res) => {
     let avatar = existingUser.avatar;
 
     if (req.file) {
-      // Delete old avatar file if it exists
-      const fs = require("fs");
-      const path = require("path");
-
-      const oldAvatarPath = path.join(
-        __dirname,
-        "../public/avatar",
-        existingUser.avatar
-      );
-
-      // Check if file exists before deleting
-      if (existingUser.avatar && fs.existsSync(oldAvatarPath)) {
-        fs.unlinkSync(oldAvatarPath); // Delete old file
+      const allowedMimeTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (!allowedMimeTypes.includes(req.file.mimetype)) {
+        return res.status(400).render("user/edit", {
+          user: existingUser,
+          title: "Edit Profile",
+          error: "Invalid image format. Only JPG, PNG, and GIF are allowed.",
+        });
       }
 
-      avatar = req.file.filename; // Set new filename
+      try {
+        // Delete old avatar file if it exists
+        const fs = require("fs");
+        const path = require("path");
+
+        const oldAvatarPath = path.join(
+          __dirname,
+          "../public/avatar",
+          existingUser.avatar
+        );
+
+        // Check if file exists before deleting
+        if (existingUser.avatar && fs.existsSync(oldAvatarPath)) {
+          fs.unlinkSync(oldAvatarPath); // Delete old file
+        }
+
+        avatar = req.file.filename; // Set new filename
+      } catch (fileError) {
+        console.error("Error processing avatar file:", fileError);
+        return res.status(500).send("Failed to process profile picture.");
+      }
     }
 
     let normalizedPhone = "";
