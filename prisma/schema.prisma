@@ -42,6 +42,7 @@ model LostItem {
   featured     Boolean    @default(false)
   lostDate     DateTime
   lostLocation String
+  locationDetails String?
   reward       Float?
   status       ItemStatus @default(LOST)
   images       String[]

@@ -4,9 +4,7 @@ const prisma = new PrismaClient();
 
 exports.getCreateLostItem = async (req, res) => {
   try {
-    const categories = await prisma.categoryType.findMany({
-      orderBy: { name: "asc" },
-    });
+    const categories = await prisma.categoryType.findMany();
 
     res.render("post/lost/create", {
       title: "Report Lost Item",
@@ -23,42 +21,59 @@ exports.getCreateLostItem = async (req, res) => {
   }
 };
 
-exports.postCreateLostItem = (req, res) => {
-  //
+const path = require("path");
+const fs = require("fs");
+
+exports.postCreateLostItem = async (req, res) => {
+  const {
+    itemTitle,
+    description,
+    categoryId,
+    lostLocation,
+    lostDate,
+    locationDetails,
+    reward,
+    featured,
+  } = req.body;
+
+  try {
+    // Validate required fields
+    // if (!itemTitle || !description || !categoryId || !locationDetails) {
+    //   const categories = await prisma.categoryType.findMany();
+    //   return res.render("post/lost/create", {
+    //     title: "Report Lost Item",
+    //     error: "Please fill in all required fields.",
+    //     categories,
+    //   });
+    // }
+
+    const parsedLostDate = new Date(lostDate); // ✅ This ensures Prisma gets a Date object
+    const parsedReward = reward ? parseFloat(reward) : null;
+
+    // Create lost item in the database
+    const lostItem = await prisma.lostItem.create({
+      data: {
+        title: itemTitle,
+        description,
+        categoryId,
+        lostDate: parsedLostDate,
+        lostLocation,
+        locationDetails,
+        reward: parsedReward || 0, // Default to 0 if not provided
+        featured: featured === "true",
+        userId: req.session.userId, // Assuming user ID is stored in session
+      },
+    });
+
+    // res.redirect(`/lost/${lostItem.id}`); // Redirect to the newly created lost item page
+    res.redirect("/user/profile");
+  } catch (err) {
+    console.error("Error creating lost item:", err);
+    const categories = await prisma.categoryType.findMany();
+    res.render("post/lost/create", {
+      title: "Report Lost Item",
+      error: "Failed to create lost item. Please try again.",
+      categories,
+    });
+  }
 };
-
-// exports.postCreatePost = async (req, res) => {
-//   const { title, content } = req.body;
-//   await prisma.post.create({
-//     data: {
-//       title,
-//       content,
-//       authorId: req.session.userId,
-//     },
-//   });
-//   res.redirect("/posts");
-// };
-
-// exports.getEditPost = async (req, res) => {
-//   const post = await prisma.post.findUnique({
-//     where: { id: req.params.id, authorId: req.session.userId },
-//   });
-//   if (!post) return res.redirect("/posts");
-//   res.render("posts/edit", { post, title: "post edit" }); // view(ui=>edit.ejs)
-// };
-
-// exports.postEditPost = async (req, res) => {
-//   const { title, content } = req.body;
-//   await prisma.post.update({
-//     where: { id: req.params.id, authorId: req.session.userId },
-//     data: { title, content },
-//   });
-//   res.redirect("/posts");
-// };
-
-// exports.postDeletePost = async (req, res) => {
-//   await prisma.post.delete({
-//     where: { id: req.params.id, authorId: req.session.userId },
-//   });
-//   res.redirect("/posts");
-// };
