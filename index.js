@@ -11,6 +11,7 @@ const lostItemRoutes = require("./routes/lostItemRoutes");
 // const foundItemRoutes = require("./routes/foundItemRoutes");
 // const claimRoutes = require("./routes/claimRoutes");
 const indexRoutes = require("./routes/indexRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -36,6 +37,7 @@ app.use("/user", authMiddleware, userRoutes);
 app.use("/lost", authMiddleware, lostItemRoutes);
 // app.use("/found", authMiddleware, foundItemRoutes);
 // app.use("/claim", authMiddleware, claimRoutes);
+app.use("/categories", categoryRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
