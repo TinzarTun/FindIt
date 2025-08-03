@@ -145,6 +145,9 @@
                 <i class="fas fa-camera mr-2"></i>
                 Add Photos
               </label>
+              <p id="imagesCount" class="mt-2 text-xs text-gray-500">
+                No photos selected
+              </p>
               <p class="mt-2 text-xs text-gray-500">
                 Upload photos of the item (JPG, PNG, GIF. Max 5MB each, up to 5
                 photos)
@@ -152,23 +155,23 @@
             </div>
 
             <!-- Image Preview Container -->
-            <div id="imagePreviewContainer" class="hidden">
-              <div
+            <!-- <div id="imagePreviewContainer" class="hidden"> -->
+            <!-- <div
                 class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"
                 id="imagePreviewGrid"
-              >
-                <!-- Image previews will be inserted here -->
-              </div>
-            </div>
+              > -->
+            <!-- Image previews will be inserted here -->
+            <!-- </div> -->
+            <!-- </div> -->
 
-            <div id="uploadStatus" class="text-xs hidden">
+            <!-- <div id="uploadStatus" class="text-xs hidden">
               <span id="uploadSuccess" class="text-green-600 hidden">
                 <i class="fas fa-check mr-1"></i>Images uploaded successfully
               </span>
               <span id="uploadError" class="text-red-600 hidden">
                 <i class="fas fa-times mr-1"></i>Some images failed to upload
               </span>
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -287,6 +290,7 @@
             </button>
             <button
               type="submit"
+              id="submitBtn"
               class="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-red-800 hover:shadow-lg transform hover:scale-105 transition-all duration-200 font-medium"
             >
               <!-- <span id="submitButtonSpinner" class="hidden">
@@ -303,8 +307,7 @@
 </section>
 
 <!-- JavaScript -->
-<script>
-  // Initialize Lucide icons
+<!-- <script>
   lucide.createIcons();
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -314,9 +317,6 @@
       "imagePreviewContainer"
     );
     const imagePreviewGrid = document.getElementById("imagePreviewGrid");
-    const uploadStatus = document.getElementById("uploadStatus");
-    const uploadSuccess = document.getElementById("uploadSuccess");
-    const uploadError = document.getElementById("uploadError");
     const submitButton = form.querySelector('button[type="submit"]');
     const submitButtonText = document.getElementById("submitButtonText");
     const submitButtonSpinner = document.getElementById("submitButtonSpinner");
@@ -325,12 +325,10 @@
     const maxFiles = 5;
     const maxFileSize = 5 * 1024 * 1024; // 5MB
 
-    // Set max date to today
     document.getElementById("lostDate").max = new Date()
       .toISOString()
       .split("T")[0];
 
-    // Handle file selection
     imagesInput.addEventListener("change", function (e) {
       const files = Array.from(e.target.files);
 
@@ -355,38 +353,34 @@
       });
 
       updateImagePreviewVisibility();
-      // Clear the input so the same file can be selected again if needed
       imagesInput.value = "";
     });
 
-    // Add image preview
     function addImagePreview(file) {
       const reader = new FileReader();
       reader.onload = function (e) {
         const imageDiv = document.createElement("div");
         imageDiv.className = "relative group";
         imageDiv.innerHTML = `
-            <img src="${e.target.result}" alt="Preview" class="w-full h-24 object-cover rounded-lg border border-gray-200">
-            <button type="button" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100" onclick="removeImage(this, '${file.name}')">
-              <i class="fas fa-times"></i>
-            </button>
-            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b-lg truncate">
-              ${file.name}
-            </div>
-          `;
+          <img src="${e.target.result}" alt="Preview" class="w-full h-24 object-cover rounded-lg border border-gray-200">
+          <button type="button" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100" onclick="removeImage(this, '${file.name}')">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b-lg truncate">
+            ${file.name}
+          </div>
+        `;
         imagePreviewGrid.appendChild(imageDiv);
       };
       reader.readAsDataURL(file);
     }
 
-    // Remove image
     window.removeImage = function (button, fileName) {
       selectedFiles = selectedFiles.filter((file) => file.name !== fileName);
       button.parentElement.remove();
       updateImagePreviewVisibility();
     };
 
-    // Update image preview visibility
     function updateImagePreviewVisibility() {
       if (selectedFiles.length > 0) {
         imagePreviewContainer.classList.remove("hidden");
@@ -395,78 +389,84 @@
       }
     }
 
-    // Cancel form function
-    // window.cancelForm = function () {
-    //   if (
-    //     confirm(
-    //       "Are you sure you want to cancel? All entered data will be lost."
-    //     )
-    //   ) {
-    //     // Reset form
-    //     form.reset();
-    //     selectedFiles = [];
-    //     imagePreviewGrid.innerHTML = "";
-    //     updateImagePreviewVisibility();
+    window.cancelForm = function () {
+      if (
+        confirm(
+          "Are you sure you want to cancel? All entered data will be lost."
+        )
+      ) {
+        form.reset();
+        selectedFiles = [];
+        imagePreviewGrid.innerHTML = "";
+        updateImagePreviewVisibility();
+        localStorage.removeItem("lostItemDraft");
+        window.location.href = "/";
+      }
+    };
 
-    //     // Clear any saved draft
-    //     localStorage.removeItem("lostItemDraft");
-
-    //     // Redirect to home or previous page
-    //     window.location.href = "/";
-    //   }
-    // };
-
-    // Form submission
     // form.addEventListener("submit", function (e) {
     //   e.preventDefault();
 
-    //   // Validate required fields
     //   const formData = new FormData(form);
-    //   const data = Object.fromEntries(formData);
 
-    //   if (
-    //     !data.title ||
-    //     !data.categoryId ||
-    //     !data.description ||
-    //     !data.lostLocation ||
-    //     !data.lostDate
-    //   ) {
-    //     alert("Please fill in all required fields.");
-    //     return;
-    //   }
+    //   selectedFiles.forEach((file) => {
+    //     formData.append("images", file); // This must match multer field name
+    //   });
 
-    //   // Show loading state
     //   submitButton.disabled = true;
     //   submitButtonText.textContent = "Submitting...";
     //   submitButtonSpinner.classList.remove("hidden");
 
-    //   // Simulate API call
-    //   setTimeout(() => {
-    //     // Reset button state
-    //     submitButton.disabled = false;
-    //     submitButtonText.textContent = "Post Lost Item";
-    //     submitButtonSpinner.classList.add("hidden");
-
-    //     alert(
-    //       "Lost item posted successfully! We'll notify you if someone finds a matching item."
-    //     );
-
-    //     // Clear any saved draft
-    //     localStorage.removeItem("lostItemDraft");
-
-    //     // Reset form
-    //     form.reset();
-    //     selectedFiles = [];
-    //     imagePreviewGrid.innerHTML = "";
-    //     updateImagePreviewVisibility();
-    //   }, 2000);
+    //   fetch("/lost/create", {
+    //     method: "POST",
+    //     body: formData,
+    //   })
+    //     .then((response) => {
+    //       if (!response.ok) throw new Error("Upload failed");
+    //       return response.json();
+    //     })
+    //     .then((data) => {
+    //       alert("Lost item posted successfully!");
+    //       form.reset();
+    //       selectedFiles = [];
+    //       imagePreviewGrid.innerHTML = "";
+    //       updateImagePreviewVisibility();
+    //     })
+    //     .catch((err) => {
+    //       console.error(err);
+    //       alert("There was an error submitting the form. Please try again.");
+    //     })
+    //     .finally(() => {
+    //       submitButton.disabled = false;
+    //       submitButtonText.textContent = "Post Lost Item";
+    //       submitButtonSpinner.classList.add("hidden");
+    //     });
     // });
 
-    // Mobile menu toggle
-    // document
-    //   .getElementById("mobileMenuButton")
-    //   ?.addEventListener("click", function () {
-    //     console.log("Mobile menu clicked");
-    //   });
+    document
+      .getElementById("mobileMenuButton")
+      ?.addEventListener("click", function () {
+        console.log("Mobile menu clicked");
+      });
+  });
+</script> -->
+
+<script>
+  document.getElementById("images").addEventListener("change", function () {
+    const maxFiles = 5;
+    const files = this.files;
+    const imagesCount = document.getElementById("imagesCount");
+
+    if (files.length === 0) {
+      imagesCount.textContent = "No photos selected";
+    } else if (files.length > maxFiles) {
+      alert(`You can only upload up to ${maxFiles} images.`);
+      this.value = ""; // reset the input so user can select again
+      imagesCount.textContent = "No photos selected";
+    } else if (files.length === 1) {
+      imagesCount.textContent = "1 photo selected";
+    } else {
+      imagesCount.textContent = `${files.length} photos selected`;
+    }
   });
 </script>

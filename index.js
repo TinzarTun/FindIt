@@ -15,8 +15,11 @@ const categoryRoutes = require("./routes/categoryRoutes");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+
 app.use(
   session({
     secret: process.env.SECRET || "default-secret", // fallback in case env is missing

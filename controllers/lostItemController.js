@@ -50,6 +50,9 @@ exports.postCreateLostItem = async (req, res) => {
     const parsedLostDate = new Date(lostDate); // ✅ This ensures Prisma gets a Date object
     const parsedReward = reward ? parseFloat(reward) : null;
 
+    const imageFilenames = req.files.map((file) => file.filename) || [];
+    // console.log("Uploaded files:", req.files);
+
     // Create lost item in the database
     const lostItem = await prisma.lostItem.create({
       data: {
@@ -60,8 +63,9 @@ exports.postCreateLostItem = async (req, res) => {
         lostLocation,
         locationDetails,
         reward: parsedReward || 0, // Default to 0 if not provided
-        featured: featured === "true",
+        featured: featured === "on",
         userId: req.session.userId, // Assuming user ID is stored in session
+        images: imageFilenames,
       },
     });
 
