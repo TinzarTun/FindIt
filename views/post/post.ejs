@@ -1,0 +1,157 @@
+<!-- Hero Section -->
+<section
+  class="bg-gradient-to-br from-primary-50 via-white to-primary-50 pt-12 sm:pt-16 lg:pt-20 pb-4 sm:pb-6 lg:pb-8"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center animate-fade-in">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+        Post an Item
+      </h1>
+      <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+        Help reunite lost items with their owners or report something you've
+        found
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Post Options Section -->
+<section class="pt-4 sm:pt-6 lg:pt-8 pb-12 sm:pb-16 lg:pb-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      <!-- Lost Item Card -->
+      <div class="group animate-slide-in-left">
+        <div
+          class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 overflow-hidden"
+        >
+          <div class="p-8 sm:p-10">
+            <div class="text-center">
+              <div
+                class="mx-auto w-16 h-16 sm:w-20 sm:h-20 bg-red-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-red-200 transition-colors duration-300"
+              >
+                <i
+                  data-lucide="search-x"
+                  class="h-8 w-8 sm:h-10 sm:w-10 text-red-600"
+                ></i>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                Report Lost Item
+              </h3>
+              <p class="text-gray-600 mb-8 leading-relaxed">
+                Lost something? Post details about your missing item and let the
+                community help you find it.
+              </p>
+              <button
+                onclick="window.location.href='/lost/create'"
+                class="w-full bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:from-red-600 hover:to-red-700 hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              >
+                Report Lost Item
+                <i
+                  data-lucide="arrow-right"
+                  class="inline-block ml-2 h-4 w-4"
+                ></i>
+              </button>
+            </div>
+          </div>
+          <div class="h-2 bg-gradient-to-r from-red-500 to-red-600"></div>
+        </div>
+      </div>
+
+      <!-- Found Item Card -->
+      <div class="group animate-slide-in-right">
+        <div
+          class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-gray-100 overflow-hidden"
+        >
+          <div class="p-8 sm:p-10">
+            <div class="text-center">
+              <div
+                class="mx-auto w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-green-200 transition-colors duration-300"
+              >
+                <i
+                  data-lucide="search-check"
+                  class="h-8 w-8 sm:h-10 sm:w-10 text-green-600"
+                ></i>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
+                Report Found Item
+              </h3>
+              <p class="text-gray-600 mb-8 leading-relaxed">
+                Found something? Help return it to its rightful owner by posting
+                the details here.
+              </p>
+              <button
+                onclick="handleFoundItem()"
+                class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:from-green-600 hover:to-green-700 hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              >
+                Report Found Item
+                <i
+                  data-lucide="arrow-right"
+                  class="inline-block ml-2 h-4 w-4"
+                ></i>
+              </button>
+            </div>
+          </div>
+          <div class="h-2 bg-gradient-to-r from-green-500 to-green-600"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Info Section -->
+    <div class="mt-12 text-center animate-fade-in">
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8"
+      >
+        <h4 class="text-lg font-semibold text-gray-900 mb-4">How it works</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="text-center">
+            <div
+              class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <i data-lucide="edit-3" class="h-6 w-6 text-primary-600"></i>
+            </div>
+            <h5 class="font-medium text-gray-900 mb-2">1. Post Details</h5>
+            <p class="text-sm text-gray-600">
+              Provide clear description and photos
+            </p>
+          </div>
+          <div class="text-center">
+            <div
+              class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <i data-lucide="users" class="h-6 w-6 text-primary-600"></i>
+            </div>
+            <h5 class="font-medium text-gray-900 mb-2">2. Community Help</h5>
+            <p class="text-sm text-gray-600">
+              Others will help search or identify
+            </p>
+          </div>
+          <div class="text-center">
+            <div
+              class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3"
+            >
+              <i
+                data-lucide="heart-handshake"
+                class="h-6 w-6 text-primary-600"
+              ></i>
+            </div>
+            <h5 class="font-medium text-gray-900 mb-2">3. Reunite</h5>
+            <p class="text-sm text-gray-600">Connect and return items safely</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Initialize Lucide icons
+  lucide.createIcons();
+
+  // Add animation delays for staggered effect
+  setTimeout(() => {
+    document.querySelector(".animate-slide-in-left").style.animationDelay =
+      "0.2s";
+    document.querySelector(".animate-slide-in-right").style.animationDelay =
+      "0.4s";
+  }, 100);
+</script>

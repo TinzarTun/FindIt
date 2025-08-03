@@ -8,6 +8,45 @@
       </p>
     </div>
 
+    <!-- Display Error Message -->
+    <% if (error) { %>
+    <div
+      id="errorBox"
+      class="mb-6 px-4 sm:px-6 py-3 bg-red-100 border border-red-400 text-red-700 rounded-lg animate-fade-in text-sm sm:text-base flex items-start justify-between relative"
+    >
+      <!-- Left: Icon + Message -->
+      <div class="flex items-start space-x-2 pr-8">
+        <svg
+          class="w-5 h-5 mt-0.5 flex-shrink-0 text-red-500"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v2m0 4h.01M12 19a7 7 0 100-14 7 7 0 000 14z"
+          />
+        </svg>
+        <div>
+          <strong class="font-semibold">Error:</strong>
+          <span><%= error %></span>
+        </div>
+      </div>
+
+      <!-- Close Button -->
+      <button
+        type="button"
+        onclick="document.getElementById('errorBox').remove()"
+        class="absolute top-2 right-3 text-red-600 hover:text-red-800 text-base font-normal"
+        aria-label="Close"
+      >
+        &times;
+      </button>
+    </div>
+    <% } %>
+
     <!-- Profile Edit Form -->
     <div
       class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in"
