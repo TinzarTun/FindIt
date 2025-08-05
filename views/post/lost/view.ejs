@@ -20,101 +20,116 @@
   </div>
   <!-- Filters and Search -->
   <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div>
-        <label for="search" class="block text-sm font-medium text-gray-700 mb-2"
-          >Search</label
-        >
-        <div class="relative">
-          <i
-            data-lucide="search"
-            class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
-          ></i>
-          <input
-            type="text"
-            id="search"
-            placeholder="Search lost items..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-          />
+    <form action="/lost" method="get">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Search -->
+        <div>
+          <label
+            for="search"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >Search</label
+          >
+          <div class="relative">
+            <i
+              data-lucide="search"
+              class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
+            ></i>
+            <input
+              type="text"
+              id="search"
+              name="search"
+              placeholder="Search lost items..."
+              value="<%= search || '' %>"
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            />
+          </div>
+        </div>
+        <!-- Category -->
+        <div>
+          <label
+            for="category"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >Category</label
+          >
+          <select
+            id="category"
+            name="category"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          >
+            <option value="">All Categories</option>
+            <% categories.forEach(category => { %>
+            <option value="<%= category.id %>" <%= category.id === selectedCategory ? 'selected' : '' %>>
+              <%= category.name %>
+            </option>
+            <% }) %>
+          </select>
+        </div>
+        <!-- Location -->
+        <div>
+          <label
+            for="location"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >Location</label
+          >
+          <select
+            id="location"
+            name="location"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          >
+            <option value="">All Locations</option>
+            <option value="downtown" <%= selectedLocation === 'downtown' ? 'selected' : '' %>>Downtown Yangon</option>
+            <option value="north" <%= selectedLocation === 'north' ? 'selected' : '' %>>North Yangon</option>
+            <option value="south" <%= selectedLocation === 'south' ? 'selected' : '' %>>South Yangon</option>
+            <option value="east" <%= selectedLocation === 'east' ? 'selected' : '' %>>East Yangon</option>
+            <option value="west" <%= selectedLocation === 'west' ? 'selected' : '' %>>West Yangon</option>
+          </select>
+        </div>
+        <!-- Date Range -->
+        <div>
+          <label
+            for="date-range"
+            class="block text-sm font-medium text-gray-700 mb-2"
+            >Date Range</label
+          >
+          <select
+            id="date-range"
+            name="dateRange"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          >
+            <option value="">All Time</option>
+            <option value="today" <%= selectedDateRange === 'today' ? 'selected' : '' %>>Today</option>
+            <option value="week" <%= selectedDateRange === 'week' ? 'selected' : '' %>>This Week</option>
+            <option value="month" <%= selectedDateRange === 'month' ? 'selected' : '' %>>This Month</option>
+            <option value="3months" <%= selectedDateRange === '3months' ? 'selected' : '' %>>Last 3 Months</option>
+          </select>
         </div>
       </div>
-      <div>
-        <label
-          for="category"
-          class="block text-sm font-medium text-gray-700 mb-2"
-          >Category</label
-        >
-        <select
-          id="category"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-        >
-          <option value="">All Categories</option>
-          <option value="electronics">Electronics</option>
-          <option value="personal">Personal Items</option>
-          <option value="documents">Documents</option>
-          <option value="jewelry">Jewelry</option>
-          <option value="clothing">Clothing</option>
-          <option value="bags">Bags & Luggage</option>
-          <option value="other">Other</option>
-        </select>
+      <!-- Buttons -->
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 pt-4 border-t"
+      >
+        <div class="flex items-center space-x-4">
+          <button
+            id="apply-filters"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-medium"
+            type="submit"
+          >
+            Apply Filters
+          </button>
+          <button
+            id="clear-filters"
+            class="text-gray-600 hover:text-gray-800 font-medium"
+            type="button"
+            onclick="window.location.href = '/lost'"
+          >
+            Clear All
+          </button>
+        </div>
+        <div id="item-count" class="mt-4 sm:mt-0 text-sm text-gray-600">
+          Showing 0 of 0 lost items
+        </div>
       </div>
-      <div>
-        <label
-          for="location"
-          class="block text-sm font-medium text-gray-700 mb-2"
-          >Location</label
-        >
-        <select
-          id="location"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-        >
-          <option value="">All Locations</option>
-          <option value="downtown">Downtown Yangon</option>
-          <option value="north">North Yangon</option>
-          <option value="south">South Yangon</option>
-          <option value="east">East Yangon</option>
-          <option value="west">West Yangon</option>
-        </select>
-      </div>
-      <div>
-        <label
-          for="date-range"
-          class="block text-sm font-medium text-gray-700 mb-2"
-          >Date Range</label
-        >
-        <select
-          id="date-range"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-        >
-          <option value="">All Time</option>
-          <option value="today">Today</option>
-          <option value="week">This Week</option>
-          <option value="month">This Month</option>
-          <option value="3months">Last 3 Months</option>
-        </select>
-      </div>
-    </div>
-    <div
-      class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 pt-4 border-t"
-    >
-      <div class="flex items-center space-x-4">
-        <button
-          id="apply-filters"
-          class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 font-medium"
-        >
-          Apply Filters
-        </button>
-        <button
-          id="clear-filters"
-          class="text-gray-600 hover:text-gray-800 font-medium"
-        >
-          Clear All
-        </button>
-      </div>
-      <div id="item-count" class="mt-4 sm:mt-0 text-sm text-gray-600">
-        Showing 0 of 0 lost items
-      </div>
-    </div>
+    </form>
   </div>
   <!-- Lost Items Grid -->
   <div
@@ -124,7 +139,7 @@
     <% if (error) { %>
     <p class="col-span-full text-center text-red-600"><%= error %></p>
     <% } else if (lostItems.length === 0) { %>
-    <p class="col-span-full text-center text-gray-600">No lost items found.</p>
+    <p class="col-span-full text-center text-gray-600">No lost items found matching your criteria.</p>
     <% } else { %> <% lostItems.forEach(item => { %>
     <div
       class="bg-white rounded-lg border overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
@@ -212,15 +227,15 @@
   <!-- Pagination -->
   <div class="flex items-center justify-between mt-8">
     <div id="pagination-summary" class="text-sm text-gray-600">
-      Showing page <%= currentPage %> of <%= totalPages %>, <%= totalItems %>
-      total items
+      Showing <%= startItem %> to <%= endItem %> of <%= totalItems %>
+      results
     </div>
 
     <% if (totalPages > 1) { %>
     <div class="flex items-center space-x-2">
       <!-- Prev button -->
       <a
-        href="?page=<%= currentPage - 1 %>"
+        href="?page=<%= currentPage - 1 %>&<%= queryString %>"
         class="px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 <%= currentPage === 1 ? 'opacity-50 pointer-events-none' : '' %>"
       >
         <i data-lucide="chevron-left" class="h-4 w-4"></i>
@@ -228,7 +243,7 @@
 
       <% for (let i = 1; i <= totalPages; i++) { %>
       <a
-        href="?page=<%= i %>"
+        href="?page=<%= i %>&<%= queryString %>"
         class="px-3 py-2 <%= i === currentPage ? 'bg-red-600 text-white' : 'border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50' %>"
       >
         <%= i %>
@@ -237,7 +252,7 @@
 
       <!-- Next button -->
       <a
-        href="?page=<%= currentPage + 1 %>"
+        href="?page=<%= currentPage + 1 %>&<%= queryString %>"
         class="px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 <%= currentPage === totalPages ? 'opacity-50 pointer-events-none' : '' %>"
       >
         <i data-lucide="chevron-right" class="h-4 w-4"></i>
