@@ -44,6 +44,9 @@ exports.getLostItemsPage = async (req, res) => {
       case "today":
         fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         break;
+      case "yesterday":
+        fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+        break;
       case "week":
         fromDate = new Date(now);
         fromDate.setDate(now.getDate() - 7);
@@ -60,7 +63,7 @@ exports.getLostItemsPage = async (req, res) => {
 
     if (fromDate) {
       filters.lostDate = {
-        gte: fromDate,
+        gte: fromDate, // gte = "greater than or equal to"
       };
     }
   }

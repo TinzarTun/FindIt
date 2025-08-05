@@ -37,17 +37,7 @@ exports.postCreateLostItem = async (req, res) => {
   } = req.body;
 
   try {
-    // Validate required fields
-    // if (!itemTitle || !description || !categoryId || !locationDetails) {
-    //   const categories = await prisma.categoryType.findMany();
-    //   return res.render("post/lost/create", {
-    //     title: "Report Lost Item",
-    //     error: "Please fill in all required fields.",
-    //     categories,
-    //   });
-    // }
-
-    const parsedLostDate = new Date(lostDate); // ✅ This ensures Prisma gets a Date object
+    const parsedLostDate = new Date(lostDate); // this ensures Prisma gets a Date object
     const parsedReward = reward ? parseFloat(reward) : null;
 
     const imageFilenames = req.files.map((file) => file.filename) || [];
