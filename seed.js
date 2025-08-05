@@ -161,6 +161,11 @@ async function main() {
   // Create categories
   const categoryData = [
     {
+      "name": "HUMAN",
+      "description": "Missing persons, lost children, elderly people, etc.",
+      "isAlive": true
+    },
+    {
       name: "PETS",
       description: "Lost pets such as dogs, cats, birds",
       isAlive: true,

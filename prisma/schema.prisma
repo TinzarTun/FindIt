@@ -17,8 +17,8 @@ model User {
   avatar    String?
   verified  Boolean  @default(false)
   address   String?
-  city      String?
-  region    String?
+  city      City?
+  region    Region?
   country   String?  @default("Myanmar")
   roleId    String   @db.ObjectId
   role      Role     @relation(fields: [roleId], references: [id])
@@ -155,6 +155,19 @@ model CategoryType {
 
   lostItems   LostItem[]
   foundItems  FoundItem[]
+}
+
+enum City {
+  Yangon
+  Mandalay
+}
+
+enum Region {
+  Downtown
+  North
+  South
+  East
+  West
 }
 
 enum ItemStatus {
