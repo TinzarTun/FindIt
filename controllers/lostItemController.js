@@ -38,7 +38,7 @@ exports.postCreateLostItem = async (req, res) => {
 
   try {
     const parsedLostDate = new Date(lostDate); // this ensures Prisma gets a Date object
-    const parsedReward = reward ? parseFloat(reward) : null;
+    const parsedReward = reward ? Math.floor(Number(reward)) : 0; // truncate decimals
 
     const imageFilenames = req.files.map((file) => file.filename) || [];
     // console.log("Uploaded files:", req.files);
