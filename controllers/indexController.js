@@ -82,8 +82,8 @@ exports.getLostItemsPage = async (req, res) => {
     ]);
 
     const totalPages = Math.ceil(totalItems / limit);
-    const startItem = skip + 1;
-    const endItem = Math.min(skip + limit, totalItems);
+    const startItem = totalItems === 0 ? 0 : skip + 1;
+    const endItem = totalItems === 0 ? 0 : Math.min(skip + limit, totalItems);
 
     const queryString = new URLSearchParams({
       search: search || "",

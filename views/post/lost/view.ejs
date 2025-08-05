@@ -126,7 +126,7 @@
           </button>
         </div>
         <div id="item-count" class="mt-4 sm:mt-0 text-sm text-gray-600">
-          Showing 0 of 0 lost items
+          Showing <%= totalItems %> lost items
         </div>
       </div>
     </form>
@@ -231,33 +231,35 @@
       results
     </div>
 
-    <% if (totalPages > 1) { %>
-    <div class="flex items-center space-x-2">
-      <!-- Prev button -->
-      <a
-        href="?page=<%= currentPage - 1 %>&<%= queryString %>"
-        class="px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 <%= currentPage === 1 ? 'opacity-50 pointer-events-none' : '' %>"
-      >
-        <i data-lucide="chevron-left" class="h-4 w-4"></i>
-      </a>
+      <% if (totalPages > 1 || lostItems.length === 0) { %>
+      <div class="flex items-center space-x-2">
+        <!-- Prev button -->
+        <a
+          href="?page=<%= currentPage - 1 %>&<%= queryString %>"
+          class="px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 <%= currentPage === 1 ? 'opacity-50 pointer-events-none' : '' %>"
+        >
+          <i data-lucide="chevron-left" class="h-4 w-4"></i>
+        </a>
 
-      <% for (let i = 1; i <= totalPages; i++) { %>
-      <a
-        href="?page=<%= i %>&<%= queryString %>"
-        class="px-3 py-2 <%= i === currentPage ? 'bg-red-600 text-white' : 'border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50' %>"
-      >
-        <%= i %>
-      </a>
-      <% } %>
+        <% if (lostItems.length > 0) { %>
+          <% for (let i = 1; i <= totalPages; i++) { %>
+            <a
+              href="?page=<%= i %>&<%= queryString %>"
+              class="px-3 py-2 <%= i === currentPage ? 'bg-red-600 text-white' : 'border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50' %>"
+            >
+              <%= i %>
+            </a>
+          <% } %>
+        <% } %>
 
-      <!-- Next button -->
-      <a
-        href="?page=<%= currentPage + 1 %>&<%= queryString %>"
-        class="px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 <%= currentPage === totalPages ? 'opacity-50 pointer-events-none' : '' %>"
-      >
-        <i data-lucide="chevron-right" class="h-4 w-4"></i>
-      </a>
-    </div>
+        <!-- Next button -->
+        <a
+          href="?page=<%= currentPage + 1 %>&<%= queryString %>"
+          class="px-3 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 <%= currentPage === totalPages ? 'opacity-50 pointer-events-none' : '' %>"
+        >
+          <i data-lucide="chevron-right" class="h-4 w-4"></i>
+        </a>
+      </div>
     <% } %>
   </div>
 </div>
