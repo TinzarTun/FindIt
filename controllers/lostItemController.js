@@ -2,6 +2,9 @@ const bcrypt = require("bcryptjs");
 const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
 
+const path = require("path");
+const fs = require("fs");
+
 exports.getCreateLostItem = async (req, res) => {
   try {
     const categories = await prisma.categoryType.findMany();
@@ -20,9 +23,6 @@ exports.getCreateLostItem = async (req, res) => {
     });
   }
 };
-
-const path = require("path");
-const fs = require("fs");
 
 exports.postCreateLostItem = async (req, res) => {
   const {
@@ -59,8 +59,7 @@ exports.postCreateLostItem = async (req, res) => {
       },
     });
 
-    // res.redirect(`/lost/${lostItem.id}`); // Redirect to the newly created lost item page
-    res.redirect("/user/profile");
+    res.redirect("/lost");
   } catch (err) {
     console.error("Error creating lost item:", err);
     const categories = await prisma.categoryType.findMany();

@@ -2,6 +2,9 @@ const session = require("express-session");
 const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
 
+const fs = require("fs");
+const path = require("path");
+
 exports.getUser = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
@@ -138,21 +141,26 @@ exports.editUserInfo = async (req, res) => {
         const fs = require("fs");
         const path = require("path");
 
-        const oldAvatarPath = path.join(
-          __dirname,
-          "../public/avatar",
-          existingUser.avatar
-        );
+        if (existingUser.avatar && typeof existingUser.avatar === "string") {
+          const oldAvatarPath = path.join(
+            __dirname,
+            "../public/uploads/avatar",
+            existingUser.avatar
+          );
 
-        // Check if file exists before deleting
-        if (existingUser.avatar && fs.existsSync(oldAvatarPath)) {
-          fs.unlinkSync(oldAvatarPath); // Delete old file
+          if (fs.existsSync(oldAvatarPath)) {
+            fs.unlinkSync(oldAvatarPath); // delete old avatar
+          }
         }
 
         avatar = req.file.filename; // Set new filename
       } catch (fileError) {
         console.error("Error processing avatar file:", fileError);
-        return res.status(500).send("Failed to process profile picture.");
+        return res.status(500).render("user/edit", {
+          user: existingUser,
+          title: "Edit Profile",
+          error: "Failed to process profile picture. Please try again.",
+        });
       }
     }
 
@@ -170,6 +178,17 @@ exports.editUserInfo = async (req, res) => {
       } else {
         return res.status(400).send("Invalid phone number format");
       }
+    }
+
+    if (
+      (!email || email.trim() === "") &&
+      (!normalizedPhone || normalizedPhone.trim() === "")
+    ) {
+      return res.status(400).render("user/edit", {
+        user: existingUser,
+        title: "Edit Profile",
+        error: "Please provide at least an email address or a phone number.",
+      });
     }
 
     const updateData = {
@@ -197,9 +216,6 @@ exports.editUserInfo = async (req, res) => {
   }
 };
 
-const fs = require("fs");
-const path = require("path");
-
 exports.delete = async (req, res) => {
   const { id } = req.params;
 
@@ -218,7 +234,11 @@ exports.delete = async (req, res) => {
 
     // Delete avatar if it exists
     if (user.avatar) {
-      const avatarPath = path.join(__dirname, "../public/avatar", user.avatar);
+      const avatarPath = path.join(
+        __dirname,
+        "../public/uploads/avatar",
+        user.avatar
+      );
       if (fs.existsSync(avatarPath)) {
         fs.unlinkSync(avatarPath);
       }
