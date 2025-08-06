@@ -2,6 +2,17 @@ const bcrypt = require("bcryptjs");
 const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
 
+const path = require("path");
+const fs = require("fs");
+
+const VALID_LOCATIONS = [
+  "Downtown Yangon",
+  "North Yangon",
+  "South Yangon",
+  "East Yangon",
+  "West Yangon",
+];
+
 exports.getCreateLostItem = async (req, res) => {
   try {
     const categories = await prisma.categoryType.findMany();
@@ -21,9 +32,6 @@ exports.getCreateLostItem = async (req, res) => {
   }
 };
 
-const path = require("path");
-const fs = require("fs");
-
 exports.postCreateLostItem = async (req, res) => {
   const {
     itemTitle,
@@ -37,18 +45,13 @@ exports.postCreateLostItem = async (req, res) => {
   } = req.body;
 
   try {
-    // Validate required fields
-    // if (!itemTitle || !description || !categoryId || !locationDetails) {
-    //   const categories = await prisma.categoryType.findMany();
-    //   return res.render("post/lost/create", {
-    //     title: "Report Lost Item",
-    //     error: "Please fill in all required fields.",
-    //     categories,
-    //   });
-    // }
+    // Validate location
+    if (!VALID_LOCATIONS.includes(lostLocation)) {
+      throw new Error("Invalid location selected.");
+    }
 
-    const parsedLostDate = new Date(lostDate); // ✅ This ensures Prisma gets a Date object
-    const parsedReward = reward ? parseFloat(reward) : null;
+    const parsedLostDate = new Date(lostDate); // this ensures Prisma gets a Date object
+    const parsedReward = reward ? Math.floor(Number(reward)) : 0; // truncate decimals
 
     const imageFilenames = req.files.map((file) => file.filename) || [];
     // console.log("Uploaded files:", req.files);
@@ -69,8 +72,7 @@ exports.postCreateLostItem = async (req, res) => {
       },
     });
 
-    // res.redirect(`/lost/${lostItem.id}`); // Redirect to the newly created lost item page
-    res.redirect("/user/profile");
+    res.redirect("/lost");
   } catch (err) {
     console.error("Error creating lost item:", err);
     const categories = await prisma.categoryType.findMany();

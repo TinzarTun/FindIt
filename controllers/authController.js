@@ -84,7 +84,7 @@ exports.postLogin = async (req, res) => {
     if (user.role.name === "Admin") {
       return res.redirect("/index.html");
     } else {
-      return res.redirect("/");
+      return res.redirect("/user/profile");
     }
   }
   return res.redirect("/auth/login");

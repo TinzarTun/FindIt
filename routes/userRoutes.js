@@ -11,7 +11,7 @@ const path = require("path");
 // Set custom storage for uploaded files
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/avatar"); // ensure this folder exists
+    cb(null, "public/uploads/avatar"); // ensure this folder exists
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname); // gets .jpg/.png etc.
