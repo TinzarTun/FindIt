@@ -30,10 +30,7 @@ exports.getLostItemsPage = async (req, res) => {
   }
 
   if (location) {
-    filters.lostLocation = {
-      contains: location,
-      mode: "insensitive",
-    };
+    filters.lostLocation = location;
   }
 
   if (dateRange) {
@@ -45,7 +42,11 @@ exports.getLostItemsPage = async (req, res) => {
         fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         break;
       case "yesterday":
-        fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+        fromDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - 1
+        );
         break;
       case "week":
         fromDate = new Date(now);

@@ -5,6 +5,14 @@ const prisma = new PrismaClient();
 const path = require("path");
 const fs = require("fs");
 
+const VALID_LOCATIONS = [
+  "Downtown Yangon",
+  "North Yangon",
+  "South Yangon",
+  "East Yangon",
+  "West Yangon",
+];
+
 exports.getCreateLostItem = async (req, res) => {
   try {
     const categories = await prisma.categoryType.findMany();
@@ -37,6 +45,11 @@ exports.postCreateLostItem = async (req, res) => {
   } = req.body;
 
   try {
+    // Validate location
+    if (!VALID_LOCATIONS.includes(lostLocation)) {
+      throw new Error("Invalid location selected.");
+    }
+
     const parsedLostDate = new Date(lostDate); // this ensures Prisma gets a Date object
     const parsedReward = reward ? Math.floor(Number(reward)) : 0; // truncate decimals
 
