@@ -217,7 +217,36 @@
               class="grid grid-cols-1 sm:grid-cols-2 gap-4"
               id="similar-items-grid"
             >
-              <!-- Similar items will be injected here by JS -->
+              <% if (similarItems && similarItems.length > 0) { %> <%
+              similarItems.forEach(item => { %>
+              <a
+                href="/lost/detail/<%= item.id %>"
+                class="block border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+              >
+                <div class="flex items-center space-x-3">
+                  <div
+                    class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden"
+                  >
+                    <img
+                      src="<%= (item.images && item.images.length > 0) ? ('/uploads/lost-items/' + item.images[0]) : 'https://cdn-icons-png.flaticon.com/512/1829/1829586.png' %>"
+                      alt="<%= item.title %>"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div class="flex-1">
+                    <h4 class="font-medium text-gray-900"><%= item.title %></h4>
+                    <p class="text-sm text-gray-600">
+                      Lost in <%= item.lostLocation %>
+                    </p>
+                    <p class="text-xs text-gray-500">
+                      <%= timeAgo(item.lostDate) %> • <%= item.category.name %>
+                    </p>
+                  </div>
+                </div>
+              </a>
+              <% }) %> <% } else { %>
+              <p class="text-gray-500">No similar items found.</p>
+              <% } %>
             </div>
           </div>
         </div>
@@ -476,274 +505,6 @@
     </div>
   </div>
 </div>
-
-<!-- <script>
-  // Mock data for the lost item (replace with actual data fetching)
-  const lostItemData = {
-    id: "65f7b3b3b3b3b3b3b3b3b3b3",
-    title: "iPhone 14 Pro",
-    description:
-      "I lost my iPhone 14 Pro near Sule Pagoda in downtown Yangon. The phone is black with a blue protective case. It has a small scratch on the back near the camera. The phone contains important work documents and family photos. There's a distinctive sticker of a golden retriever on the back of the case. Please contact me if you find it - I'm offering a $50 reward for its safe return.",
-    category: { name: "Electronics" },
-    featured: true,
-    lostDate: "2023-12-15T14:30:00Z",
-    lostLocation: "Sule Pagoda Area, Downtown Yangon",
-    locationDetails:
-      "Lost somewhere between the pagoda entrance and the nearby coffee shop around 2:30 PM on December 15, 2023",
-    reward: 50.0,
-    status: "LOST",
-    images: [
-      "/placeholder.svg?height=400&width=600",
-      "/placeholder.svg?height=400&width=600",
-      "/placeholder.svg?height=400&width=600",
-      "/placeholder.svg?height=400&width=600",
-    ],
-    user: {
-      id: "65f7b3b3b3b3b3b3b3b3b3b5",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      phone: "09123456789",
-      avatar: "/placeholder.svg?height=50&width=50",
-      verified: true,
-      address: "123 Main St",
-      city: "Yangon",
-      region: "Yangon Region",
-      country: "Myanmar",
-      memberSince: "2022",
-      itemsPosted: 23,
-    },
-    views: 156,
-    shares: 12,
-    messages: 8,
-    activeClaims: 3,
-    brand: "Apple",
-    model: "iPhone 14 Pro",
-    color: "Black",
-    caseType: "Blue Protective Case",
-    condition: "Good (minor scratch)",
-    distinctiveFeatures: "Dog sticker on case",
-  };
-
-  // Similar items mock data
-  const similarItemsData = [
-    {
-      title: "iPhone 13",
-      location: "Yangon",
-      reward: 40,
-      timeAgo: "3 days ago",
-      category: "Electronics",
-      image: "/placeholder.svg?height=48&width=48",
-    },
-    {
-      title: "Samsung Galaxy",
-      location: "Mandalay",
-      reward: 35,
-      timeAgo: "1 week ago",
-      category: "Electronics",
-      image: "/placeholder.svg?height=48&width=48",
-    },
-    {
-      title: "AirPods Pro",
-      location: "Naypyidaw",
-      reward: 20,
-      timeAgo: "2 days ago",
-      category: "Electronics",
-      image: "/placeholder.svg?height=48&width=48",
-    },
-  ];
-
-  document.addEventListener("DOMContentLoaded", () => {
-    // Initialize Lucide icons
-    lucide.createIcons();
-
-    // Populate main item details
-    document.getElementById("breadcrumb-title").textContent =
-      lostItemData.title;
-    document.getElementById("item-title").textContent = lostItemData.title;
-    document.getElementById("item-description").textContent =
-      lostItemData.description;
-    document.getElementById(
-      "item-status-badge"
-    ).innerHTML = `<i data-lucide="search-x" class="h-4 w-4 mr-1 inline"></i> ${lostItemData.status}`;
-
-    const lostDate = new Date(lostItemData.lostDate);
-    document.getElementById(
-      "item-lost-date"
-    ).textContent = `Lost on ${lostDate.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    })}`;
-    document.getElementById("item-time-ago").textContent = "2 hours ago"; // Static for now
-    document.getElementById(
-      "item-views"
-    ).textContent = `${lostItemData.views} views`;
-    document.getElementById("item-category").textContent =
-      lostItemData.category.name;
-
-    if (lostItemData.reward) {
-      document.getElementById("reward-section").classList.remove("hidden");
-      document.getElementById(
-        "item-reward"
-      ).textContent = `$${lostItemData.reward.toFixed(2)}`;
-    }
-
-    if (lostItemData.featured) {
-      document.getElementById("featured-badge").classList.remove("hidden");
-    }
-
-    // Populate item specifications
-    document.getElementById("detail-category").textContent =
-      lostItemData.category.name;
-    document.getElementById("detail-status").textContent = lostItemData.status;
-    document.getElementById("detail-brand").textContent = lostItemData.brand;
-    document.getElementById("detail-model").textContent = lostItemData.model;
-    document.getElementById("detail-color").textContent = lostItemData.color;
-    document.getElementById("detail-case").textContent = lostItemData.caseType;
-    document.getElementById("detail-condition").textContent =
-      lostItemData.condition;
-    document.getElementById("detail-features").textContent =
-      lostItemData.distinctiveFeatures;
-    document.getElementById("detail-featured").textContent =
-      lostItemData.featured ? "Yes" : "No";
-    document.getElementById("detail-active-claims").textContent =
-      lostItemData.activeClaims;
-
-    // Populate lost location details
-    document.getElementById("lost-location-main").textContent =
-      lostItemData.lostLocation;
-    document.getElementById("lost-location-details").textContent =
-      lostItemData.locationDetails;
-
-    // Populate claims status
-    document.getElementById(
-      "claims-summary"
-    ).textContent = `${lostItemData.activeClaims} claims pending review`;
-    document.getElementById("claims-status-badge").textContent = "PENDING"; // Assuming PENDING for mock
-
-    // Populate owner info
-    document.getElementById("owner-avatar").src = lostItemData.user.avatar;
-    document.getElementById("owner-name").textContent = lostItemData.user.name;
-    document.getElementById(
-      "owner-location"
-    ).textContent = `Verified • ${lostItemData.user.city}, ${lostItemData.user.country}`;
-    document.getElementById(
-      "owner-member-stats"
-    ).textContent = `Member since ${lostItemData.user.memberSince} • ${lostItemData.user.itemsPosted} items posted`;
-    if (lostItemData.user.verified) {
-      document
-        .getElementById("owner-verified-badge")
-        .classList.remove("hidden");
-    }
-    document
-      .getElementById("call-owner-button")
-      .addEventListener("click", () => {
-        alert(
-          `Calling ${lostItemData.user.name} at ${lostItemData.user.phone}`
-        );
-      });
-
-    // Populate post statistics
-    document.getElementById("stats-views").textContent = lostItemData.views;
-    document.getElementById("stats-shares").textContent = lostItemData.shares;
-    document.getElementById("stats-messages").textContent =
-      lostItemData.messages;
-    document.getElementById("stats-active-claims").textContent =
-      lostItemData.activeClaims;
-    document.getElementById("stats-status").textContent = lostItemData.status;
-
-    // Image Gallery Logic
-    const mainItemImage = document.getElementById("main-item-image");
-    const thumbnails = document.querySelectorAll(".thumbnail");
-
-    // Set initial main image from the first thumbnail's full-src
-    if (thumbnails.length > 0) {
-      mainItemImage.src = thumbnails[0].dataset.fullSrc;
-      mainItemImage.alt = thumbnails[0].alt;
-    } else {
-      mainItemImage.src = "/placeholder.svg?height=400&width=600";
-      mainItemImage.alt = "No image available";
-    }
-
-    // Add click listeners to thumbnails
-    thumbnails.forEach((thumbnail) => {
-      thumbnail.addEventListener("click", () => {
-        mainItemImage.src = thumbnail.dataset.fullSrc;
-        // Update active state for thumbnails
-        thumbnails.forEach((img) => {
-          img.classList.remove("border-red-500");
-          img.classList.add("border-white");
-        });
-        thumbnail.classList.remove("border-white");
-        thumbnail.classList.add("border-red-500");
-      });
-    });
-
-    // Populate similar items
-    const similarItemsGrid = document.getElementById("similar-items-grid");
-    similarItemsGrid.innerHTML = ""; // Clear existing
-    similarItemsData.forEach((item) => {
-      const itemHtml = `
-          <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
-                <img src="${item.image}" alt="${
-        item.title
-      }" class="w-full h-full object-cover">
-              </div>
-              <div class="flex-1">
-                <h4 class="font-medium text-gray-900">${item.title}</h4>
-                <p class="text-sm text-gray-600">Lost in ${
-                  item.location
-                } • $${item.reward.toFixed(2)} reward</p>
-                <p class="text-xs text-gray-500">${item.timeAgo} • ${
-        item.category
-      }</p>
-              </div>
-            </div>
-          </div>
-        `;
-      similarItemsGrid.insertAdjacentHTML("beforeend", itemHtml);
-    });
-
-    // Contact Modal Functions
-    function openContactModal() {
-      document.getElementById("contactModal").classList.remove("hidden");
-      document.body.style.overflow = "hidden";
-    }
-    function closeContactModal() {
-      document.getElementById("contactModal").classList.add("hidden");
-      document.body.style.overflow = "auto";
-    }
-    // Expose functions to global scope for onclick attributes
-    window.openContactModal = openContactModal;
-    window.closeContactModal = closeContactModal;
-
-    // Close modal when clicking outside
-    document.getElementById("contactModal").addEventListener("click", (e) => {
-      if (e.target.id === "contactModal") {
-        closeContactModal();
-      }
-    });
-    // Mobile menu toggle (placeholder, needs implementation)
-    const mobileMenuButton = document.getElementById("mobileMenuButton");
-    if (mobileMenuButton) {
-      mobileMenuButton.addEventListener("click", () => {
-        alert(
-          "Mobile menu toggle clicked! (Functionality not implemented yet)"
-        );
-      });
-    }
-    // Handle form submission
-    document
-      .querySelector("#contactModal form")
-      .addEventListener("submit", (e) => {
-        e.preventDefault();
-        alert("Message sent successfully! The owner will be notified.");
-        closeContactModal();
-      });
-  });
-</script> -->
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

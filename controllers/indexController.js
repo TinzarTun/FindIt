@@ -152,6 +152,7 @@ exports.getDetailLostItem = async (req, res) => {
       });
     }
 
+    // Helper function
     function timeAgo(date) {
       const now = new Date();
       const diff = now - new Date(date);
@@ -167,10 +168,53 @@ exports.getDetailLostItem = async (req, res) => {
       return "just now";
     }
 
+    // limit the search for similar lost items to only those reported in the last 60 days
+    const sixtyDaysAgo = new Date();
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
+    // Fetch similar lost items
+    const similarItemsRaw = await prisma.lostItem.findMany({
+      where: {
+        id: { not: itemId },
+        categoryId: lostItem.categoryId,
+        lostLocation: lostItem.lostLocation,
+        status: "LOST",
+        lostDate: {
+          gte: sixtyDaysAgo,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        lostLocation: true,
+        lostDate: true,
+        images: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        lostDate: "desc",
+      },
+      take: 4,
+    });
+
+    const similarItems = similarItemsRaw.map((item) => ({
+      id: item.id,
+      title: item.title,
+      lostLocation: item.lostLocation,
+      images: item.images || [],
+      lostDate: item.lostDate,
+      category: item.category,
+    }));
+
     res.render("post/lost/detail", {
       title: `Lost Item - ${lostItem.title}`,
       lostItem,
       timeAgo,
+      similarItems,
       error: null,
     });
   } catch (err) {
