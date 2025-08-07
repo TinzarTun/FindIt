@@ -269,31 +269,39 @@
               <div class="relative">
                 <img
                   id="owner-avatar"
-                  src="/placeholder.svg?height=50&width=50"
-                  alt="Owner"
+                  src="<%= lostItem.user.avatar 
+                    ? '/uploads/avatar/' + lostItem.user.avatar + '?height=50&width=50'
+                    : 'https://cdn-icons-png.flaticon.com/512/847/847969.png?height=50&width=50' %>"
+                  alt="<%= lostItem.user.name %>"
                   class="w-12 h-12 rounded-full border-2 border-gray-200"
                 />
                 <!-- Verified Badge -->
+                <% if (lostItem.user.verified) { %>
                 <div
                   id="owner-verified-badge"
-                  class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center hidden"
+                  class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center"
                 >
                   <i data-lucide="check" class="h-3 w-3 text-white"></i>
                 </div>
+                <% } else { %>
+                <div
+                  id="owner-verified-badge"
+                  class="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full border-2 border-white flex items-center justify-center"
+                >
+                  <i data-lucide="hourglass" class="h-3 w-3 text-white"></i>
+                </div>
+                <% } %>
               </div>
               <div>
                 <h4 id="owner-name" class="font-semibold text-gray-900">
-                  Sarah Johnson
+                  <%= lostItem.user.name %>
                 </h4>
                 <div class="flex items-center text-sm text-gray-600">
-                  <i
-                    data-lucide="shield-check"
-                    class="h-3 w-3 mr-1 text-green-500"
-                  ></i>
-                  <span id="owner-location">Verified • Yangon, Myanmar</span>
+                  Member since <%= new
+                  Date(lostItem.user.createdAt).getFullYear() %>
                 </div>
                 <div id="owner-member-stats" class="text-xs text-gray-500">
-                  Member since 2022 • 23 items posted
+                  <%= lostItem.user.lostItems.length %> lost items posted
                 </div>
               </div>
             </div>
@@ -387,10 +395,53 @@
               <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-600">Status</span>
                 <span id="stats-status" class="font-semibold text-red-600"
-                  >LOST</span
+                  ><%= lostItem.status.toUpperCase() %></span
                 >
               </div>
             </div>
+          </div>
+        </div>
+        <!-- Safety Guidelines -->
+        <div
+          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+        >
+          <div class="px-6 py-6 border-b border-gray-100 bg-gray-50">
+            <h3 class="text-lg font-bold text-gray-900 flex items-center">
+              <i data-lucide="shield" class="h-5 w-5 mr-2 text-primary-600"></i>
+              Safety Guidelines
+            </h3>
+          </div>
+          <div class="px-6 py-6">
+            <ul class="text-sm text-gray-700 space-y-2">
+              <li class="flex items-start">
+                <i
+                  data-lucide="check"
+                  class="h-4 w-4 text-green-500 mt-0.5 mr-2 flex-shrink-0"
+                ></i>
+                Meet in public places during daylight
+              </li>
+              <li class="flex items-start">
+                <i
+                  data-lucide="check"
+                  class="h-4 w-4 text-green-500 mt-0.5 mr-2 flex-shrink-0"
+                ></i>
+                Bring identification for verification
+              </li>
+              <li class="flex items-start">
+                <i
+                  data-lucide="check"
+                  class="h-4 w-4 text-green-500 mt-0.5 mr-2 flex-shrink-0"
+                ></i>
+                Inform someone about the meeting
+              </li>
+              <li class="flex items-start">
+                <i
+                  data-lucide="check"
+                  class="h-4 w-4 text-green-500 mt-0.5 mr-2 flex-shrink-0"
+                ></i>
+                Trust your instincts
+              </li>
+            </ul>
           </div>
         </div>
         <!-- Report Post -->

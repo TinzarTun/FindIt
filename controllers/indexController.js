@@ -141,7 +141,11 @@ exports.getDetailLostItem = async (req, res) => {
       where: { id: itemId },
       include: {
         category: true,
-        user: true,
+        user: {
+          include: {
+            lostItems: true,
+          },
+        },
       },
     });
 
