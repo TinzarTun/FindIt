@@ -152,9 +152,25 @@ exports.getDetailLostItem = async (req, res) => {
       });
     }
 
+    function timeAgo(date) {
+      const now = new Date();
+      const diff = now - new Date(date);
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (days > 0) return days + (days === 1 ? " day ago" : " days ago");
+      if (hours > 0) return hours + (hours === 1 ? " hour ago" : " hours ago");
+      if (minutes > 0)
+        return minutes + (minutes === 1 ? " minute ago" : " minutes ago");
+      return "just now";
+    }
+
     res.render("post/lost/detail", {
       title: `Lost Item - ${lostItem.title}`,
       lostItem,
+      timeAgo,
       error: null,
     });
   } catch (err) {

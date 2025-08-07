@@ -1,5 +1,7 @@
 <!-- Breadcrumb -->
-<section class="py-4 bg-white border-b border-gray-200">
+<section
+  class="py-4 bg-white border-b border-gray-200 sticky top-16 z-30 shadow-sm"
+>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <nav class="flex items-center space-x-2 text-sm">
       <a href="/" class="text-gray-500 hover:text-primary-600 transition-colors"
@@ -18,6 +20,7 @@
     </nav>
   </div>
 </section>
+
 <!-- Item Details -->
 <section class="py-8">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +29,7 @@
       <div class="lg:col-span-2 space-y-8">
         <!-- Item Images and Basic Info -->
         <div
-          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in"
+          class="<%= lostItem.featured ? 'bg-purple-100 border-purple-500' : 'bg-white' %> rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in"
         >
           <!-- Item Images Gallery -->
           <div class="relative">
@@ -95,38 +98,42 @@
                   id="item-title"
                   class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2"
                 >
-                  iPhone 14 Pro
+                  <%= lostItem.title %>
                 </h1>
                 <div
                   class="flex flex-wrap items-center gap-4 text-sm text-gray-600"
                 >
                   <div class="flex items-center">
                     <i data-lucide="calendar" class="h-4 w-4 mr-1"></i>
-                    <span id="item-lost-date">Lost on Dec 15, 2023</span>
+                    <span id="item-lost-date"
+                      >Lost on <%= lostItem.lostDate.toDateString() %></span
+                    >
                   </div>
                   <div class="flex items-center">
                     <i data-lucide="clock" class="h-4 w-4 mr-1"></i>
-                    <span id="item-time-ago">2 hours ago</span>
-                  </div>
-                  <div class="flex items-center">
-                    <i data-lucide="eye" class="h-4 w-4 mr-1"></i>
-                    <span id="item-views">156 views</span>
+                    <span id="item-time-ago"
+                      ><%= timeAgo(lostItem.lostDate) %></span
+                    >
                   </div>
                   <div class="flex items-center">
                     <i data-lucide="tag" class="h-4 w-4 mr-1"></i>
-                    <span id="item-category">Electronics</span>
+                    <span id="item-category"
+                      ><%= lostItem.category.name %></span
+                    >
                   </div>
                 </div>
               </div>
-              <div id="reward-section" class="text-right hidden">
+              <% if (lostItem.reward) { %>
+              <div id="reward-section" class="text-right">
                 <div
                   id="item-reward"
                   class="text-2xl sm:text-3xl font-bold text-yellow-600 mb-1"
                 >
-                  $50.00
+                  MMK <%= lostItem.reward.toLocaleString('en-US') %>
                 </div>
                 <div class="text-sm text-gray-600">Reward Offered</div>
               </div>
+              <% } %>
             </div>
             <!-- Description -->
             <div class="mb-6">
@@ -134,89 +141,8 @@
                 Description
               </h3>
               <p id="item-description" class="text-gray-700 leading-relaxed">
-                I lost my iPhone 14 Pro near Sule Pagoda in downtown Yangon. The
-                phone is black with a blue protective case. It has a small
-                scratch on the back near the camera. The phone contains
-                important work documents and family photos. There's a
-                distinctive sticker of a golden retriever on the back of the
-                case. Please contact me if you find it - I'm offering a $50
-                reward for its safe return.
+                <%= lostItem.description %>
               </p>
-            </div>
-            <!-- Item Specifications -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-              <div>
-                <h4 class="font-semibold text-gray-900 mb-3">Item Details</h4>
-                <div class="space-y-2 text-sm">
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Category:</span>
-                    <span id="detail-category" class="font-medium"
-                      >Electronics</span
-                    >
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Status:</span>
-                    <span id="detail-status" class="font-medium text-red-600"
-                      >LOST</span
-                    >
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Brand:</span>
-                    <span id="detail-brand" class="font-medium">Apple</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Model:</span>
-                    <span id="detail-model" class="font-medium"
-                      >iPhone 14 Pro</span
-                    >
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Color:</span>
-                    <span id="detail-color" class="font-medium">Black</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Case:</span>
-                    <span id="detail-case" class="font-medium"
-                      >Blue Protective Case</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h4 class="font-semibold text-gray-900 mb-3">
-                  Additional Info
-                </h4>
-                <div class="space-y-2 text-sm">
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Condition:</span>
-                    <span id="detail-condition" class="font-medium"
-                      >Good (minor scratch)</span
-                    >
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Distinctive Features:</span>
-                    <span id="detail-features" class="font-medium"
-                      >Dog sticker on case</span
-                    >
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Featured:</span>
-                    <span
-                      id="detail-featured"
-                      class="font-medium text-purple-600"
-                      >Yes</span
-                    >
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">Active Claims:</span>
-                    <span
-                      id="detail-active-claims"
-                      class="font-medium text-blue-600"
-                      >3</span
-                    >
-                  </div>
-                </div>
-              </div>
             </div>
             <!-- Location Details -->
             <div class="mb-6">
@@ -234,14 +160,13 @@
                       id="lost-location-main"
                       class="font-medium text-gray-900"
                     >
-                      Sule Pagoda Area, Downtown Yangon
+                      <%= lostItem.lostLocation %>
                     </p>
                     <p
                       id="lost-location-details"
                       class="text-sm text-gray-600 mt-1"
                     >
-                      Lost somewhere between the pagoda entrance and the nearby
-                      coffee shop around 2:30 PM on December 15, 2023
+                      <%= lostItem.locationDetails %>
                     </p>
                   </div>
                 </div>
