@@ -132,3 +132,100 @@ exports.getLostItemsPage = async (req, res) => {
     });
   }
 };
+
+exports.getDetailLostItem = async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    const lostItem = await prisma.lostItem.findUnique({
+      where: { id: itemId },
+      include: {
+        category: true,
+        user: {
+          include: {
+            lostItems: true,
+          },
+        },
+      },
+    });
+
+    if (!lostItem) {
+      return res.status(404).render("error", {
+        title: "Item Not Found",
+        error: "The requested lost item does not exist.",
+      });
+    }
+
+    // Helper function
+    function timeAgo(date) {
+      const now = new Date();
+      const diff = now - new Date(date);
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (days > 0) return days + (days === 1 ? " day ago" : " days ago");
+      if (hours > 0) return hours + (hours === 1 ? " hour ago" : " hours ago");
+      if (minutes > 0)
+        return minutes + (minutes === 1 ? " minute ago" : " minutes ago");
+      return "just now";
+    }
+
+    // limit the search for similar lost items to only those reported in the last 60 days
+    const sixtyDaysAgo = new Date();
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
+    // Fetch similar lost items
+    const similarItemsRaw = await prisma.lostItem.findMany({
+      where: {
+        id: { not: itemId },
+        categoryId: lostItem.categoryId,
+        lostLocation: lostItem.lostLocation,
+        status: "LOST",
+        lostDate: {
+          gte: sixtyDaysAgo,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        lostLocation: true,
+        lostDate: true,
+        images: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        lostDate: "desc",
+      },
+      take: 4,
+    });
+
+    const similarItems = similarItemsRaw.map((item) => ({
+      id: item.id,
+      title: item.title,
+      lostLocation: item.lostLocation,
+      images: item.images || [],
+      lostDate: item.lostDate,
+      category: item.category,
+    }));
+
+    res.render("post/lost/detail", {
+      title: `Lost Item - ${lostItem.title}`,
+      lostItem,
+      timeAgo,
+      similarItems,
+      error: null,
+    });
+  } catch (err) {
+    console.error("Error fetching lost item details:", err);
+    res.status(500).render("error", {
+      title: "Error",
+      error: "Failed to load lost item details.",
+    });
+  }
+};
