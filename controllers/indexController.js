@@ -132,3 +132,36 @@ exports.getLostItemsPage = async (req, res) => {
     });
   }
 };
+
+exports.getDetailLostItem = async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    const lostItem = await prisma.lostItem.findUnique({
+      where: { id: itemId },
+      include: {
+        category: true,
+        user: true,
+      },
+    });
+
+    if (!lostItem) {
+      return res.status(404).render("error", {
+        title: "Item Not Found",
+        error: "The requested lost item does not exist.",
+      });
+    }
+
+    res.render("post/lost/detail", {
+      title: `Lost Item - ${lostItem.title}`,
+      lostItem,
+      error: null,
+    });
+  } catch (err) {
+    console.error("Error fetching lost item details:", err);
+    res.status(500).render("error", {
+      title: "Error",
+      error: "Failed to load lost item details.",
+    });
+  }
+};
