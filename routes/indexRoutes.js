@@ -6,5 +6,6 @@ router.get("/", indexController.getHomePage);
 router.get("/post", indexController.getPostPage);
 router.get("/lost", indexController.getLostItemsPage);
 router.get("/lost/detail/:id", indexController.getDetailLostItem);
+router.get("/found", indexController.getFoundItemsPage);
 
 module.exports = router;

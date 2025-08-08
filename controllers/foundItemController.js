@@ -92,8 +92,7 @@ exports.postCreateFoundItem = async (req, res) => {
       },
     });
 
-    // res.redirect("/found");
-    res.redirect("/user/profile");
+    res.redirect("/found");
   } catch (err) {
     console.error("Error creating found item:", err);
     const categories = await prisma.categoryType.findMany();
