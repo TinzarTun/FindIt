@@ -8,7 +8,7 @@ const authMiddleware = require("./middlewares/authMiddleware");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const lostItemRoutes = require("./routes/lostItemRoutes");
-// const foundItemRoutes = require("./routes/foundItemRoutes");
+const foundItemRoutes = require("./routes/foundItemRoutes");
 // const claimRoutes = require("./routes/claimRoutes");
 const indexRoutes = require("./routes/indexRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
@@ -38,7 +38,7 @@ app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
 app.use("/user", authMiddleware, userRoutes);
 app.use("/lost", authMiddleware, lostItemRoutes);
-// app.use("/found", authMiddleware, foundItemRoutes);
+app.use("/found", authMiddleware, foundItemRoutes);
 // app.use("/claim", authMiddleware, claimRoutes);
 app.use("/categories", categoryRoutes);
 

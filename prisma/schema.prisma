@@ -63,6 +63,11 @@ model FoundItem {
   category     CategoryType @relation(fields: [categoryId], references: [id])
   foundDate     DateTime
   foundLocation String
+  locationDetails String?
+  condition     String? 
+  questionOne     String
+  questionTwo     String?
+  questionThree   String?
   images        String[]
   status        ItemStatus @default(FOUND)
   userId        String     @db.ObjectId
@@ -81,6 +86,10 @@ model Claim {
   userId      String       @db.ObjectId
   lostItemId  String?      @db.ObjectId
   foundItemId String?      @db.ObjectId
+  answerOne   String
+  answerTwo   String?
+  answerThree String?
+  additionalInfo String?
   evidence    String[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
