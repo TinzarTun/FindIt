@@ -13,6 +13,14 @@ const VALID_LOCATIONS = [
   "West Yangon",
 ];
 
+const VALID_ITEM_CONDITIONS = [
+  "Excellent",
+  "Good",
+  "Fair",
+  "Poor",
+  "Damaged",
+];
+
 exports.getCreateFoundItem = async (req, res) => {
   try {
     const categories = await prisma.categoryType.findMany();

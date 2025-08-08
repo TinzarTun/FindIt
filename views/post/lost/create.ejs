@@ -47,7 +47,7 @@
                 name="itemTitle"
                 required
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
-                placeholder="e.g., iPhone 14 Pro, Car Keys, Wallet"
+                placeholder="e.g., Car Keys, Wallet, Phone"
               />
             </div>
             <div>
@@ -163,25 +163,6 @@
                 photos)
               </p>
             </div>
-
-            <!-- Image Preview Container -->
-            <!-- <div id="imagePreviewContainer" class="hidden"> -->
-            <!-- <div
-                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"
-                id="imagePreviewGrid"
-              > -->
-            <!-- Image previews will be inserted here -->
-            <!-- </div> -->
-            <!-- </div> -->
-
-            <!-- <div id="uploadStatus" class="text-xs hidden">
-              <span id="uploadSuccess" class="text-green-600 hidden">
-                <i class="fas fa-check mr-1"></i>Images uploaded successfully
-              </span>
-              <span id="uploadError" class="text-red-600 hidden">
-                <i class="fas fa-times mr-1"></i>Some images failed to upload
-              </span>
-            </div> -->
           </div>
         </div>
 
@@ -293,7 +274,6 @@
               onclick="window.location.href = '/post'"
               class="flex-1 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium"
             >
-              <!-- <i data-lucide="x" class="h-4 w-4 mr-2 inline"></i> -->
               Cancel
             </button>
             <button
@@ -301,10 +281,6 @@
               id="submitBtn"
               class="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-red-800 hover:shadow-lg transform hover:scale-105 transition-all duration-200 font-medium"
             >
-              <!-- <span id="submitButtonSpinner" class="hidden">
-                <i class="fas fa-spinner fa-spin mr-2"></i>
-              </span>
-              <span id="submitButtonText">Post Lost Item</span> -->
               Post Lost Item
             </button>
           </div>
@@ -313,151 +289,6 @@
     </div>
   </div>
 </section>
-
-<!-- JavaScript -->
-<!-- <script>
-  lucide.createIcons();
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("lostItemForm");
-    const imagesInput = document.getElementById("images");
-    const imagePreviewContainer = document.getElementById(
-      "imagePreviewContainer"
-    );
-    const imagePreviewGrid = document.getElementById("imagePreviewGrid");
-    const submitButton = form.querySelector('button[type="submit"]');
-    const submitButtonText = document.getElementById("submitButtonText");
-    const submitButtonSpinner = document.getElementById("submitButtonSpinner");
-
-    let selectedFiles = [];
-    const maxFiles = 5;
-    const maxFileSize = 5 * 1024 * 1024; // 5MB
-
-    document.getElementById("lostDate").max = new Date()
-      .toISOString()
-      .split("T")[0];
-
-    imagesInput.addEventListener("change", function (e) {
-      const files = Array.from(e.target.files);
-
-      if (selectedFiles.length + files.length > maxFiles) {
-        alert(`You can only upload up to ${maxFiles} images.`);
-        return;
-      }
-
-      files.forEach((file) => {
-        if (file.size > maxFileSize) {
-          alert(`File "${file.name}" is too large. Maximum size is 5MB.`);
-          return;
-        }
-
-        if (!file.type.startsWith("image/")) {
-          alert(`File "${file.name}" is not an image.`);
-          return;
-        }
-
-        selectedFiles.push(file);
-        addImagePreview(file);
-      });
-
-      updateImagePreviewVisibility();
-      imagesInput.value = "";
-    });
-
-    function addImagePreview(file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const imageDiv = document.createElement("div");
-        imageDiv.className = "relative group";
-        imageDiv.innerHTML = `
-          <img src="${e.target.result}" alt="Preview" class="w-full h-24 object-cover rounded-lg border border-gray-200">
-          <button type="button" class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100" onclick="removeImage(this, '${file.name}')">
-            <i class="fas fa-times"></i>
-          </button>
-          <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 rounded-b-lg truncate">
-            ${file.name}
-          </div>
-        `;
-        imagePreviewGrid.appendChild(imageDiv);
-      };
-      reader.readAsDataURL(file);
-    }
-
-    window.removeImage = function (button, fileName) {
-      selectedFiles = selectedFiles.filter((file) => file.name !== fileName);
-      button.parentElement.remove();
-      updateImagePreviewVisibility();
-    };
-
-    function updateImagePreviewVisibility() {
-      if (selectedFiles.length > 0) {
-        imagePreviewContainer.classList.remove("hidden");
-      } else {
-        imagePreviewContainer.classList.add("hidden");
-      }
-    }
-
-    window.cancelForm = function () {
-      if (
-        confirm(
-          "Are you sure you want to cancel? All entered data will be lost."
-        )
-      ) {
-        form.reset();
-        selectedFiles = [];
-        imagePreviewGrid.innerHTML = "";
-        updateImagePreviewVisibility();
-        localStorage.removeItem("lostItemDraft");
-        window.location.href = "/";
-      }
-    };
-
-    // form.addEventListener("submit", function (e) {
-    //   e.preventDefault();
-
-    //   const formData = new FormData(form);
-
-    //   selectedFiles.forEach((file) => {
-    //     formData.append("images", file); // This must match multer field name
-    //   });
-
-    //   submitButton.disabled = true;
-    //   submitButtonText.textContent = "Submitting...";
-    //   submitButtonSpinner.classList.remove("hidden");
-
-    //   fetch("/lost/create", {
-    //     method: "POST",
-    //     body: formData,
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) throw new Error("Upload failed");
-    //       return response.json();
-    //     })
-    //     .then((data) => {
-    //       alert("Lost item posted successfully!");
-    //       form.reset();
-    //       selectedFiles = [];
-    //       imagePreviewGrid.innerHTML = "";
-    //       updateImagePreviewVisibility();
-    //     })
-    //     .catch((err) => {
-    //       console.error(err);
-    //       alert("There was an error submitting the form. Please try again.");
-    //     })
-    //     .finally(() => {
-    //       submitButton.disabled = false;
-    //       submitButtonText.textContent = "Post Lost Item";
-    //       submitButtonSpinner.classList.add("hidden");
-    //     });
-    // });
-
-    document
-      .getElementById("mobileMenuButton")
-      ?.addEventListener("click", function () {
-        console.log("Mobile menu clicked");
-      });
-  });
-</script> -->
 
 <script>
   document.getElementById("images").addEventListener("change", function () {
