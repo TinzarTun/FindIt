@@ -9,13 +9,13 @@
       >
       <i data-lucide="chevron-right" class="h-4 w-4 text-gray-400"></i>
       <a
-        href="/lost"
+        href="/found"
         class="text-gray-500 hover:text-primary-600 transition-colors"
-        >Lost Items</a
+        >Found Items</a
       >
       <i data-lucide="chevron-right" class="h-4 w-4 text-gray-400"></i>
       <span class="text-gray-900 font-medium" id="breadcrumb-title"
-        ><%= lostItem.title %></span
+        ><%= foundItem.title %></span
       >
     </nav>
   </div>
@@ -29,7 +29,7 @@
       <div class="lg:col-span-2 space-y-8">
         <!-- Item Images and Basic Info -->
         <div
-          class="<%= lostItem.featured ? 'bg-purple-100 border-purple-500' : 'bg-white' %> rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in"
+          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in"
         >
           <!-- Item Images Gallery -->
           <div class="relative">
@@ -39,48 +39,36 @@
               <!-- Main Image Display -->
               <img
                 id="main-item-image"
-                src="<%= lostItem.images && lostItem.images.length > 0 ? '/uploads/lost-items/' + lostItem.images[0] : 'https://cdn-icons-png.flaticon.com/512/1829/1829586.png' %>"
-                alt="Lost Item Image"
+                src="<%= foundItem.images && foundItem.images.length > 0 ? '/uploads/found-items/' + foundItem.images[0] : 'https://cdn-icons-png.flaticon.com/512/1829/1829586.png' %>"
+                alt="Found Item Image"
                 class="w-full h-full object-contain"
               />
-
-              <!-- Featured Badge -->
-              <% if (lostItem.featured) { %>
-              <div class="absolute top-4 left-4">
-                <span
-                  class="bg-purple-500 text-white text-sm font-semibold px-3 py-1 rounded-full"
-                >
-                  <i data-lucide="star" class="h-4 w-4 mr-1 inline"></i>
-                  Featured
-                </span>
-              </div>
-              <% } %>
 
               <!-- Status Badge -->
               <div class="absolute top-4 right-4">
                 <span
-                  class="bg-red-200 text-red-800 text-sm font-semibold px-3 py-1 rounded-full border border-red-300"
+                  class="bg-green-200 text-green-800 text-sm font-semibold px-3 py-1 rounded-full border border-green-300"
                 >
-                  <i data-lucide="search-x" class="h-4 w-4 mr-1 inline"></i>
-                  <%= lostItem.status.toUpperCase() %>
+                  <i data-lucide="search-check" class="h-4 w-4 mr-1 inline"></i>
+                  <%= foundItem.status.toUpperCase() %>
                 </span>
               </div>
             </div>
 
             <!-- Image Thumbnails -->
-            <% if (lostItem.images && lostItem.images.length > 1) { %>
+            <% if (foundItem.images && foundItem.images.length > 1) { %>
             <div class="absolute bottom-4 left-4 right-4">
               <div
                 id="thumbnail-gallery"
                 class="flex space-x-2 overflow-x-auto justify-center"
               >
                 <!-- Thumbnails are now directly in HTML -->
-                <% lostItem.images.forEach((img, index) => { %>
+                <% foundItem.images.forEach((img, index) => { %>
                 <img
-                  src="/uploads/lost-items/<%= img %>"
-                  alt="Lost Item Thumbnail <%= index + 1 %>"
-                  class="w-16 h-16 object-cover rounded-lg border-2 <%= index === 0 ? 'border-red-500' : 'border-white' %> cursor-pointer hover:border-red-500 transition-all duration-200 shadow-sm thumbnail"
-                  data-full-src="/uploads/lost-items/<%= img %>"
+                  src="/uploads/found-items/<%= img %>"
+                  alt="Found Item Thumbnail <%= index + 1 %>"
+                  class="w-16 h-16 object-cover rounded-lg border-2 <%= index === 0 ? 'border-green-500' : 'border-white' %> cursor-pointer hover:border-green-500 transition-all duration-200 shadow-sm thumbnail"
+                  data-full-src="/uploads/found-items/<%= img %>"
                 />
                 <% }) %>
               </div>
@@ -98,40 +86,40 @@
                   id="item-title"
                   class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2"
                 >
-                  <%= lostItem.title %>
+                  <%= foundItem.title %>
                 </h1>
                 <div
                   class="flex flex-wrap items-center gap-4 text-sm text-gray-600"
                 >
                   <div class="flex items-center">
                     <i data-lucide="calendar" class="h-4 w-4 mr-1"></i>
-                    <span id="item-lost-date"
-                      >Lost on <%= lostItem.lostDate.toDateString() %></span
+                    <span id="item-found-date"
+                      >Found on <%= foundItem.foundDate.toDateString() %></span
                     >
                   </div>
                   <div class="flex items-center">
                     <i data-lucide="clock" class="h-4 w-4 mr-1"></i>
                     <span id="item-time-ago"
-                      ><%= timeAgo(lostItem.lostDate) %></span
+                      ><%= timeAgo(foundItem.foundDate) %></span
                     >
                   </div>
                   <div class="flex items-center">
                     <i data-lucide="tag" class="h-4 w-4 mr-1"></i>
                     <span id="item-category"
-                      ><%= lostItem.category.name %></span
+                      ><%= foundItem.category.name %></span
                     >
                   </div>
                 </div>
               </div>
-              <% if (lostItem.reward) { %>
+              <% if (foundItem.status === 'FOUND') { %>
               <div id="reward-section" class="text-right">
                 <div
                   id="item-reward"
-                  class="text-lg font-semibold text-yellow-600 mb-1"
+                  class="text-lg font-semibold text-green-600 mb-1"
                 >
-                  MMK <%= lostItem.reward.toLocaleString('en-US') %>
+                  Available for Pickup
                 </div>
-                <div class="text-sm text-gray-600">Reward Offered</div>
+                <div class="text-sm text-gray-600">Safe Location</div>
               </div>
               <% } %>
             </div>
@@ -141,32 +129,46 @@
                 Description
               </h3>
               <p id="item-description" class="text-gray-700 leading-relaxed">
-                <%= lostItem.description %>
+                <%= foundItem.description %>
               </p>
+            </div>
+            <!-- Item Specifications -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-3">
+                  Additional Info
+                </h4>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Condition:</span>
+                    <span class="font-medium"><%= foundItem.condition %></span>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- Location Details -->
             <div class="mb-6">
               <h3 class="text-lg font-semibold text-gray-900 mb-3">
-                Lost Location
+                Found Location
               </h3>
               <div class="bg-gray-50 rounded-lg p-4">
                 <div class="flex items-start space-x-3">
                   <i
                     data-lucide="map-pin"
-                    class="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0"
+                    class="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0"
                   ></i>
                   <div>
                     <p
-                      id="lost-location-main"
+                      id="found-location-main"
                       class="font-medium text-gray-900"
                     >
-                      <%= lostItem.lostLocation %>
+                      <%= foundItem.foundLocation %>
                     </p>
                     <p
-                      id="lost-location-details"
+                      id="found-location-details"
                       class="text-sm text-gray-600 mt-1"
                     >
-                      <%= lostItem.locationDetails %>
+                      <%= foundItem.locationDetails %>
                     </p>
                   </div>
                 </div>
@@ -179,37 +181,64 @@
               </h3>
               <div class="space-y-3">
                 <div
-                  class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded-lg"
+                  class="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg"
                 >
                   <div class="flex items-center">
                     <i
-                      data-lucide="clock"
-                      class="h-4 w-4 text-yellow-600 mr-2"
+                      data-lucide="users"
+                      class="h-4 w-4 text-blue-600 mr-2"
                     ></i>
-                    <span
-                      id="claims-summary"
-                      class="text-sm font-medium text-yellow-800"
-                      >3 claims pending review</span
+                    <span class="text-sm font-medium text-blue-800"
+                      >2 people have claimed this item</span
                     >
                   </div>
                   <span
-                    id="claims-status-badge"
-                    class="text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full"
-                    >PENDING</span
+                    class="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-full"
+                    >IN_REVIEW</span
                   >
+                </div>
+              </div>
+            </div>
+            <!-- Verification Process -->
+            <div class="mb-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                Claim Verification
+              </h3>
+              <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="flex items-start">
+                  <i
+                    data-lucide="shield-check"
+                    class="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0"
+                  ></i>
+                  <div>
+                    <h4 class="text-sm font-semibold text-blue-900 mb-2">
+                      To claim these keys, you must provide:
+                    </h4>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                      <li>• Description of the keychain details</li>
+                      <li>• What the letter on the keychain represents</li>
+                      <li>• Car model/year (if known)</li>
+                      <li>• Valid ID for verification</li>
+                      <li>• Proof of ownership (registration, etc.)</li>
+                      <li>• Evidence photos if available</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <!-- Similar Lost Items -->
+        <!-- Similar Found Items -->
         <div
           class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-left"
         >
           <div class="px-6 sm:px-8 py-6 border-b border-gray-100 bg-gray-50">
             <h3 class="text-xl font-bold text-gray-900 flex items-center">
-              <i data-lucide="search" class="h-5 w-5 mr-2 text-primary-600"></i>
-              Similar Lost Items
+              <i
+                data-lucide="search-check"
+                class="h-5 w-5 mr-2 text-primary-600"
+              ></i>
+              Similar Found Items
             </h3>
           </div>
           <div class="px-6 sm:px-8 py-6">
@@ -220,7 +249,7 @@
               <% if (similarItems && similarItems.length > 0) { %> <%
               similarItems.forEach(item => { %>
               <a
-                href="/lost/detail/<%= item.id %>"
+                href="/found/detail/<%= item.id %>"
                 class="block border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
               >
                 <div class="flex items-center space-x-3">
@@ -228,7 +257,7 @@
                     class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden"
                   >
                     <img
-                      src="<%= (item.images && item.images.length > 0) ? ('/uploads/lost-items/' + item.images[0]) : 'https://cdn-icons-png.flaticon.com/512/1829/1829586.png' %>"
+                      src="<%= (item.images && item.images.length > 0) ? ('/uploads/found-items/' + item.images[0]) : 'https://cdn-icons-png.flaticon.com/512/1829/1829586.png' %>"
                       alt="<%= item.title %>"
                       class="w-full h-full object-cover"
                     />
@@ -236,10 +265,10 @@
                   <div class="flex-1">
                     <h4 class="font-medium text-gray-900"><%= item.title %></h4>
                     <p class="text-sm text-gray-600">
-                      Lost in <%= item.lostLocation %>
+                      Found in <%= item.foundLocation %>
                     </p>
                     <p class="text-xs text-gray-500">
-                      <%= timeAgo(item.lostDate) %> • <%= item.category.name %>
+                      <%= timeAgo(item.foundDate) %> • <%= item.category.name %>
                     </p>
                   </div>
                 </div>
@@ -259,8 +288,11 @@
         >
           <div class="px-6 py-6 border-b border-gray-100 bg-gray-50">
             <h3 class="text-lg font-bold text-gray-900 flex items-center">
-              <i data-lucide="user" class="h-5 w-5 mr-2 text-primary-600"></i>
-              Contact Owner
+              <i
+                data-lucide="user-check"
+                class="h-5 w-5 mr-2 text-primary-600"
+              ></i>
+              Claim This Item
             </h3>
           </div>
           <div class="px-6 py-6">
@@ -269,14 +301,14 @@
               <div class="relative">
                 <img
                   id="owner-avatar"
-                  src="<%= lostItem.user.avatar 
-                    ? '/uploads/avatar/' + lostItem.user.avatar + '?height=50&width=50'
+                  src="<%= foundItem.user.avatar 
+                    ? '/uploads/avatar/' + foundItem.user.avatar + '?height=50&width=50'
                     : 'https://cdn-icons-png.flaticon.com/512/847/847969.png?height=50&width=50' %>"
-                  alt="<%= lostItem.user.name %>"
+                  alt="<%= foundItem.user.name %>"
                   class="w-12 h-12 rounded-full border-2 border-gray-200"
                 />
                 <!-- Verified Badge -->
-                <% if (lostItem.user.verified) { %>
+                <% if (foundItem.user.verified) { %>
                 <div
                   id="owner-verified-badge"
                   class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center"
@@ -294,14 +326,14 @@
               </div>
               <div>
                 <h4 id="owner-name" class="font-semibold text-gray-900">
-                  <%= lostItem.user.name %>
+                  <%= foundItem.user.name %>
                 </h4>
                 <div class="flex items-center text-sm text-gray-600">
                   Member since <%= new
-                  Date(lostItem.user.createdAt).getFullYear() %>
+                  Date(foundItem.user.createdAt).getFullYear() %>
                 </div>
                 <div id="owner-member-stats" class="text-xs text-gray-500">
-                  <%= lostItem.user.lostItems.length %> lost items posted
+                  <%= foundItem.user.foundItems.length %> found items posted
                 </div>
               </div>
             </div>
@@ -329,22 +361,25 @@
                 Share This Post
               </button>
             </div>
-            <!-- Safety Tips -->
-            <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <!-- Claim Requirements -->
+            <div
+              class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4"
+            >
               <div class="flex items-start">
                 <i
-                  data-lucide="shield"
-                  class="h-5 w-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0"
+                  data-lucide="info"
+                  class="h-5 w-5 text-yellow-600 mt-0.5 mr-3 flex-shrink-0"
                 ></i>
                 <div>
-                  <h5 class="text-sm font-semibold text-blue-900 mb-1">
-                    Safety Tips
+                  <h5 class="text-sm font-semibold text-yellow-900 mb-1">
+                    Claim Requirements
                   </h5>
-                  <ul class="text-xs text-blue-800 space-y-1">
-                    <li>• Meet in public places</li>
-                    <li>• Verify item details before meeting</li>
-                    <li>• Bring a friend if possible</li>
-                    <li>• Trust your instincts</li>
+                  <ul class="text-xs text-yellow-800 space-y-1">
+                    <li>• Provide detailed description</li>
+                    <li>• Show valid identification</li>
+                    <li>• Proof of ownership if available</li>
+                    <li>• Meet in safe public location</li>
+                    <li>• Upload evidence photos</li>
                   </ul>
                 </div>
               </div>
@@ -395,7 +430,7 @@
               <div class="flex items-center justify-between">
                 <span class="text-sm text-gray-600">Status</span>
                 <span id="stats-status" class="font-semibold text-red-600"
-                  ><%= lostItem.status.toUpperCase() %></span
+                  ><%= foundItem.status.toUpperCase() %></span
                 >
               </div>
             </div>

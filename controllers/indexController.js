@@ -357,3 +357,100 @@ exports.getFoundItemsPage = async (req, res) => {
     });
   }
 };
+
+exports.getDetailFoundItem = async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    const foundItem = await prisma.foundItem.findUnique({
+      where: { id: itemId },
+      include: {
+        category: true,
+        user: {
+          include: {
+            foundItems: true,
+          },
+        },
+      },
+    });
+
+    if (!foundItem) {
+      return res.status(404).render("error", {
+        title: "Item Not Found",
+        error: "The requested found item does not exist.",
+      });
+    }
+
+    // Helper function
+    function timeAgo(date) {
+      const now = new Date();
+      const diff = now - new Date(date);
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (days > 0) return days + (days === 1 ? " day ago" : " days ago");
+      if (hours > 0) return hours + (hours === 1 ? " hour ago" : " hours ago");
+      if (minutes > 0)
+        return minutes + (minutes === 1 ? " minute ago" : " minutes ago");
+      return "just now";
+    }
+
+    // limit the search for similar found items to only those reported in the last 60 days
+    const sixtyDaysAgo = new Date();
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
+    // Fetch similar found items
+    const similarItemsRaw = await prisma.foundItem.findMany({
+      where: {
+        id: { not: itemId },
+        categoryId: foundItem.categoryId,
+        foundLocation: foundItem.foundLocation,
+        status: "FOUND",
+        foundDate: {
+          gte: sixtyDaysAgo,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        foundLocation: true,
+        foundDate: true,
+        images: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        foundDate: "desc",
+      },
+      take: 4,
+    });
+
+    const similarItems = similarItemsRaw.map((item) => ({
+      id: item.id,
+      title: item.title,
+      foundLocation: item.foundLocation,
+      images: item.images || [],
+      foundDate: item.foundDate,
+      category: item.category,
+    }));
+
+    res.render("post/found/detail", {
+      title: `Found Item - ${foundItem.title}`,
+      foundItem,
+      timeAgo,
+      similarItems,
+      error: null,
+    });
+  } catch (err) {
+    console.error("Error fetching found item details:", err);
+    res.status(500).render("error", {
+      title: "Error",
+      error: "Failed to load found item details.",
+    });
+  }
+};
