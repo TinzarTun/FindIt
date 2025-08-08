@@ -175,67 +175,51 @@
           </div>
           <div class="px-6 sm:px-8 py-8">
             <div class="space-y-4">
-              <div class="flex items-start space-x-4 p-4 bg-blue-50 rounded-xl">
+              <% if (activities && activities.length > 0) { %> <%
+              activities.forEach(activity => { %>
+              <div
+                class="flex items-start space-x-4 p-4 rounded-xl <% if (activity.type === 'found') { %> bg-blue-50 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-50 <% } %> <% if (activity.type === 'claim') { %> bg-purple-50 <% } %> <% if (activity.type === 'message') { %> bg-green-50 <% } %>"
+              >
                 <div
-                  class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"
+                  class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 <% if (activity.type === 'found') { %> bg-blue-100 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-100 <% } %> <% if (activity.type === 'claim') { %> bg-purple-100 <% } %> <% if (activity.type === 'message') { %> bg-green-100 <% } %>"
                 >
+                  <% if (activity.type === 'found') { %>
                   <i
                     data-lucide="search-check"
                     class="h-4 w-4 text-blue-600"
                   ></i>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-medium text-gray-900">
-                    Posted a found item
-                  </p>
-                  <p class="text-sm text-gray-600">
-                    iPhone 14 Pro found at Central Park
-                  </p>
-                  <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
-                </div>
-              </div>
-              <div
-                class="flex items-start space-x-4 p-4 bg-green-50 rounded-xl"
-              >
-                <div
-                  class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0"
-                >
+                  <% } else if (activity.type === 'lost') { %>
                   <i
-                    data-lucide="check-circle"
-                    class="h-4 w-4 text-green-600"
+                    data-lucide="alert-triangle"
+                    class="h-4 w-4 text-yellow-600"
                   ></i>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-medium text-gray-900">
-                    Item successfully returned
-                  </p>
-                  <p class="text-sm text-gray-600">
-                    Your wallet was returned to its owner
-                  </p>
-                  <p class="text-xs text-gray-500 mt-1">1 day ago</p>
-                </div>
-              </div>
-              <div
-                class="flex items-start space-x-4 p-4 bg-purple-50 rounded-xl"
-              >
-                <div
-                  class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0"
-                >
+                  <% } else if (activity.type === 'claim') { %>
                   <i
                     data-lucide="file-text"
                     class="h-4 w-4 text-purple-600"
                   ></i>
+                  <% } else if (activity.type === 'message') { %>
+                  <i
+                    data-lucide="message-square"
+                    class="h-4 w-4 text-green-600"
+                  ></i>
+                  <% } %>
                 </div>
                 <div class="flex-1">
                   <p class="text-sm font-medium text-gray-900">
-                    New claim received
+                    <%= activity.title %>
                   </p>
                   <p class="text-sm text-gray-600">
-                    Someone claimed your found MacBook
+                    <%= activity.description %>
                   </p>
-                  <p class="text-xs text-gray-500 mt-1">3 days ago</p>
+                  <p class="text-xs text-gray-500 mt-1">
+                    <%= activity.timeAgo %>
+                  </p>
                 </div>
               </div>
+              <% }) %> <% } else { %>
+              <p class="text-sm text-gray-500">No recent activity yet.</p>
+              <% } %>
             </div>
           </div>
         </div>
@@ -271,7 +255,9 @@
                     >Lost Items</span
                   >
                 </div>
-                <span class="text-2xl font-bold text-gray-900">5</span>
+                <span class="text-2xl font-bold text-gray-900"
+                  ><%= user.lostItems.length %></span
+                >
               </div>
               <div
                 class="flex items-center justify-between p-4 bg-green-50 rounded-xl"
@@ -289,7 +275,9 @@
                     >Found Items</span
                   >
                 </div>
-                <span class="text-2xl font-bold text-gray-900">12</span>
+                <span class="text-2xl font-bold text-gray-900"
+                  ><%= user.foundItems.length %></span
+                >
               </div>
               <div
                 class="flex items-center justify-between p-4 bg-blue-50 rounded-xl"
@@ -307,7 +295,7 @@
                     >Claims Made</span
                   >
                 </div>
-                <span class="text-2xl font-bold text-gray-900">8</span>
+                <span class="text-2xl font-bold text-gray-900">0</span>
               </div>
               <div
                 class="flex items-center justify-between p-4 bg-purple-50 rounded-xl"
@@ -323,7 +311,7 @@
                   </div>
                   <span class="text-sm font-medium text-gray-700">Returns</span>
                 </div>
-                <span class="text-2xl font-bold text-gray-900">15</span>
+                <span class="text-2xl font-bold text-gray-900">0</span>
               </div>
             </div>
           </div>

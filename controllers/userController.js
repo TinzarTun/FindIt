@@ -2,6 +2,10 @@ const session = require("express-session");
 const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
 
+const dayjs = require("dayjs");
+const relativeTime = require("dayjs/plugin/relativeTime.js");
+dayjs.extend(relativeTime);
+
 const fs = require("fs");
 const path = require("path");
 
@@ -9,7 +13,74 @@ exports.getUser = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.session.userId },
+      include: {
+        lostItems: true,
+        foundItems: true,
+      },
+      // claims: {
+      //   include: {
+      //     foundItem: true,
+      //     lostItem: true,
+      //   },
+      // },
+      // messages: {
+      //   include: {
+      //     claim: {
+      //       include: { foundItem: true, lostItem: true },
+      //     },
+      //   },
+      // },
     });
+
+    // Build activity log
+    let activities = [];
+
+    // Found items posted
+    user.foundItems.forEach((item) => {
+      activities.push({
+        type: "found",
+        title: "Posted a found item",
+        description: `${item.title} found at ${item.foundLocation}`,
+        timeAgo: dayjs(item.createdAt).fromNow(),
+      });
+    });
+
+    // Lost items posted
+    user.lostItems.forEach((item) => {
+      activities.push({
+        type: "lost",
+        title: "Reported a lost item",
+        description: `${item.title} lost at ${item.lostLocation}`,
+        timeAgo: dayjs(item.createdAt).fromNow(),
+      });
+    });
+
+    // Claims submitted
+    // user.claims.forEach((claim) => {
+    //   const item = claim.foundItem || claim.lostItem;
+    //   activities.push({
+    //     type: "claim",
+    //     title: "Submitted a claim",
+    //     description: `Claimed ${item?.title || "an item"}`,
+    //     timeAgo: dayjs(claim.createdAt).fromNow(),
+    //   });
+    // });
+
+    // Messages sent
+    // user.messages.forEach((msg) => {
+    //   const item = msg.claim.foundItem || msg.claim.lostItem;
+    //   activities.push({
+    //     type: "message",
+    //     title: "Sent a message",
+    //     description: `Regarding ${item?.title || "an item"}`,
+    //     timeAgo: dayjs(msg.createdAt).fromNow(),
+    //   });
+    // });
+
+    // Sort by newest activity first
+    activities.sort(
+      (a, b) => dayjs(b.timeAgo).unix() - dayjs(a.timeAgo).unix()
+    );
 
     // format createdAt date
     const createdAt = new Date(user.createdAt);
@@ -89,6 +160,7 @@ exports.getUser = async (req, res) => {
       formattedDate,
       formattedPhone,
       progress,
+      activities,
       title: "Profile",
     });
   } catch (error) {
