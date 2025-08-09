@@ -30,6 +30,7 @@ exports.getUser = async (req, res) => {
         title: "Posted a found item",
         description: `${item.title} found at ${item.foundLocation}`,
         timeAgo: dayjs(item.createdAt).fromNow(),
+        createdAt: item.createdAt,
       });
     });
 
@@ -41,13 +42,12 @@ exports.getUser = async (req, res) => {
         title: "Reported a lost item",
         description: `${item.title} lost at ${item.lostLocation}`,
         timeAgo: dayjs(item.createdAt).fromNow(),
+        createdAt: item.createdAt,
       });
     });
 
     // Sort by newest activity first
-    activities.sort(
-      (a, b) => dayjs(b.timeAgo).unix() - dayjs(a.timeAgo).unix()
-    );
+    activities.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     // format createdAt date
     const createdAt = new Date(user.createdAt);
@@ -124,11 +124,122 @@ exports.getUser = async (req, res) => {
 
     res.render("user/profile", {
       user,
+      userId: req.session.userId,
       formattedDate,
       formattedPhone,
       progress,
       activities,
       title: "Profile",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        lostItems: true,
+        foundItems: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).render("404", { message: "User not found" });
+    }
+
+    // Build activity log
+    let activities = [];
+
+    // Found items posted
+    user.foundItems.forEach((item) => {
+      activities.push({
+        id: item.id,
+        type: "found",
+        title: "Posted a found item",
+        description: `${item.title} found at ${item.foundLocation}`,
+        timeAgo: dayjs(item.createdAt).fromNow(),
+        createdAt: item.createdAt,
+      });
+    });
+
+    // Lost items posted
+    user.lostItems.forEach((item) => {
+      activities.push({
+        id: item.id,
+        type: "lost",
+        title: "Reported a lost item",
+        description: `${item.title} lost at ${item.lostLocation}`,
+        timeAgo: dayjs(item.createdAt).fromNow(),
+        createdAt: item.createdAt,
+      });
+    });
+
+    // Sort by newest activity first
+    activities.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    // format createdAt date
+    const createdAt = new Date(user.createdAt);
+    const options = { year: "numeric", month: "short" };
+    const formattedDate = createdAt.toLocaleDateString("en-US", options);
+
+    // format phone number helper function
+    function formatPhone(phone) {
+      if (!phone) return "-";
+      let digits = phone.replace(/\s+/g, "").replace(/-/g, ""); // remove any existing spaces
+      if (digits.startsWith("0")) digits = "+95" + digits.slice(1); // replace leading 0 with +95 (Myanmar country code)
+      // format mobile numbers starting with +959
+      if (/^\+959\d{7,9}$/.test(digits)) {
+        let parts = [
+          digits.slice(0, 3), // +95
+          digits.slice(3, 4), // 9
+          digits.slice(4, 7), // XXX
+          digits.slice(7, 10), // XXX
+          digits.slice(10), // rest
+        ].filter(Boolean);
+        return parts.join(" ");
+      }
+
+      // format landline numbers (e.g., +951XXXXXX or +951XXXXXXX)
+      if (/^\+95[1-9]\d{5,7}$/.test(digits)) {
+        let parts = [
+          digits.slice(0, 3), // +95
+          digits.slice(3, 4), // region code
+          digits.slice(4, 7), // XXX
+          digits.slice(7), // rest
+        ].filter(Boolean);
+        return parts.join(" ");
+      }
+      return digits; // fallback if format unexpected
+    }
+
+    const formattedPhone = formatPhone(user.phone);
+
+    const publicUser = {
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      city: user.city,
+      region: user.region,
+      country: user.country,
+      avatar: user.avatar,
+      createdAt: user.createdAt,
+      verified: user.verified,
+      lostItems: user.lostItems,
+      foundItems: user.foundItems,
+    };
+
+    res.render("user/view", {
+      user: publicUser,
+      formattedDate,
+      formattedPhone,
+      activities,
+      title: `${user.name}'s Profile`,
     });
   } catch (error) {
     console.error(error);

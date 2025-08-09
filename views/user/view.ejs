@@ -65,16 +65,6 @@
               </div>
             </div>
           </div>
-          <!-- Edit Button -->
-          <div>
-            <a
-              href="/user/edit/<%= user.id %>"
-              class="block sm:inline sm:mx-0 mx-auto bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-2.5 rounded-xl hover:from-primary-700 hover:to-primary-800 hover:shadow-lg transform hover:scale-105 transition-all duration-200 font-medium"
-            >
-              <i data-lucide="edit-3" class="h-4 w-4 mr-2 inline"></i>
-              Edit Profile
-            </a>
-          </div>
         </div>
       </div>
     </div>
@@ -177,51 +167,50 @@
             <div class="space-y-4">
               <% if (activities && activities.length > 0) { %> <%
               activities.forEach(activity => { %>
-              <a
-                href="<%= activity.type === 'lost' ? '/lost/detail/' + activity.id : activity.type === 'found' ? '/found/detail/' + activity.id : '#' %>"
-                class="block"
+                <a
+                  href="<%= activity.type === 'lost' ? '/lost/detail/' + activity.id : activity.type === 'found' ? '/found/detail/' + activity.id : '#' %>"
+                  class="block"
+                >
+                <div
+                class="flex items-start space-x-4 p-4 rounded-xl <% if (activity.type === 'found') { %> bg-blue-50 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-50 <% } %> <% if (activity.type === 'claim') { %> bg-purple-50 <% } %> <% if (activity.type === 'message') { %> bg-green-50 <% } %>"
               >
                 <div
-                  class="flex items-start space-x-4 p-4 rounded-xl <% if (activity.type === 'found') { %> bg-blue-50 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-50 <% } %> <% if (activity.type === 'claim') { %> bg-purple-50 <% } %> <% if (activity.type === 'message') { %> bg-green-50 <% } %>"
+                  class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 <% if (activity.type === 'found') { %> bg-blue-100 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-100 <% } %> <% if (activity.type === 'claim') { %> bg-purple-100 <% } %> <% if (activity.type === 'message') { %> bg-green-100 <% } %>"
                 >
-                  <div
-                    class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 <% if (activity.type === 'found') { %> bg-blue-100 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-100 <% } %> <% if (activity.type === 'claim') { %> bg-purple-100 <% } %> <% if (activity.type === 'message') { %> bg-green-100 <% } %>"
-                  >
-                    <% if (activity.type === 'found') { %>
-                    <i
-                      data-lucide="search-check"
-                      class="h-4 w-4 text-blue-600"
-                    ></i>
-                    <% } else if (activity.type === 'lost') { %>
-                    <i
-                      data-lucide="alert-triangle"
-                      class="h-4 w-4 text-yellow-600"
-                    ></i>
-                    <% } else if (activity.type === 'claim') { %>
-                    <i
-                      data-lucide="file-text"
-                      class="h-4 w-4 text-purple-600"
-                    ></i>
-                    <% } else if (activity.type === 'message') { %>
-                    <i
-                      data-lucide="message-square"
-                      class="h-4 w-4 text-green-600"
-                    ></i>
-                    <% } %>
-                  </div>
-                  <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-900">
-                      <%= activity.title %>
-                    </p>
-                    <p class="text-sm text-gray-600">
-                      <%= activity.description %>
-                    </p>
-                    <p class="text-xs text-gray-500 mt-1">
-                      <%= activity.timeAgo %>
-                    </p>
-                  </div>
+                  <% if (activity.type === 'found') { %>
+                  <i
+                    data-lucide="search-check"
+                    class="h-4 w-4 text-blue-600"
+                  ></i>
+                  <% } else if (activity.type === 'lost') { %>
+                  <i
+                    data-lucide="alert-triangle"
+                    class="h-4 w-4 text-yellow-600"
+                  ></i>
+                  <% } else if (activity.type === 'claim') { %>
+                  <i
+                    data-lucide="file-text"
+                    class="h-4 w-4 text-purple-600"
+                  ></i>
+                  <% } else if (activity.type === 'message') { %>
+                  <i
+                    data-lucide="message-square"
+                    class="h-4 w-4 text-green-600"
+                  ></i>
+                  <% } %>
                 </div>
-              </a>
+                <div class="flex-1">
+                  <p class="text-sm font-medium text-gray-900">
+                    <%= activity.title %>
+                  </p>
+                  <p class="text-sm text-gray-600">
+                    <%= activity.description %>
+                  </p>
+                  <p class="text-xs text-gray-500 mt-1">
+                    <%= activity.timeAgo %>
+                  </p>
+                </div>
+              </div>
               <% }) %> <% } else { %>
               <p class="text-sm text-gray-500">No recent activity yet.</p>
               <% } %>
@@ -318,123 +307,6 @@
                 </div>
                 <span class="text-2xl font-bold text-gray-900">0</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Account Status -->
-        <div
-          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-right"
-        >
-          <div class="px-6 py-6 border-b border-gray-100 bg-gray-50">
-            <h3 class="text-xl font-bold text-gray-900 flex items-center">
-              <i
-                data-lucide="shield-check"
-                class="h-5 w-5 mr-2 text-primary-600"
-              ></i>
-              Account Status
-            </h3>
-          </div>
-          <div class="px-6 py-8">
-            <div class="space-y-6">
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-700"
-                  >Email Verified</span
-                >
-                <% if (user.email !== "-") { %>
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
-                >
-                  <i data-lucide="check" class="h-3 w-3 mr-1"></i>
-                  Yes
-                </span>
-                <% } else { %>
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"
-                >
-                  <i data-lucide="x" class="h-3 w-3 mr-1"></i>
-                  No
-                </span>
-                <% } %>
-              </div>
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-700"
-                  >Phone Verified</span
-                >
-                <% if (formattedPhone && formattedPhone !== "-") { %>
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
-                >
-                  <i data-lucide="check" class="h-3 w-3 mr-1"></i>
-                  Yes
-                </span>
-                <% } else { %>
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"
-                >
-                  <i data-lucide="x" class="h-3 w-3 mr-1"></i>
-                  No
-                </span>
-                <% } %>
-              </div>
-              <div class="pt-2">
-                <div class="flex items-center justify-between text-sm mb-2">
-                  <span class="text-gray-600">Profile Completion</span>
-                  <span class="font-medium text-gray-900"
-                    ><%= progress %>%</span
-                  >
-                </div>
-
-                <div class="w-full bg-gray-200 rounded-full h-3">
-                  <div
-                    class="h-3 bg-gradient-to-r rounded-full transition-all duration-500 ease-in-out animate-pulse-slow from-blue-400 to-blue-500 w-[<%= progress %>%]"
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div
-          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-right"
-        >
-          <div class="px-6 py-6 border-b border-gray-100 bg-gray-50">
-            <h3 class="text-xl font-bold text-gray-900 flex items-center">
-              <i data-lucide="zap" class="h-5 w-5 mr-2 text-primary-600"></i>
-              Quick Actions
-            </h3>
-          </div>
-          <div class="px-6 py-8">
-            <div class="space-y-3">
-              <button
-                onclick="window.location.href='/user/view/<%= user.id %>'"
-                class="w-full flex items-center justify-center px-4 py-3 bg-primary-50 text-primary-700 rounded-xl hover:bg-primary-100 transition-colors font-medium"
-              >
-                <i data-lucide="earth" class="h-4 w-4 mr-2"></i>
-                View My Public Profile
-              </button>
-              <button
-                onclick="openPasswordModal()"
-                class="w-full flex items-center justify-center px-4 py-3 bg-gray-50 text-gray-700 rounded-xl hover:bg-gray-100 transition-colors font-medium"
-              >
-                <i data-lucide="key" class="h-4 w-4 mr-2"></i>
-                Update Password
-              </button>
-              <button
-                onclick="confirmLogout()"
-                class="w-full flex items-center justify-center px-4 py-3 bg-yellow-50 text-yellow-700 rounded-xl hover:bg-yellow-100 transition-colors font-medium"
-              >
-                <i data-lucide="log-out" class="h-4 w-4 mr-2"></i>
-                Logout
-              </button>
-              <button
-                onclick="confirmDeleteAccount()"
-                class="w-full flex items-center justify-center px-4 py-3 bg-red-50 text-red-700 rounded-xl hover:bg-red-100 transition-colors font-medium"
-              >
-                <i data-lucide="trash-2" class="h-4 w-4 mr-2"></i>
-                Delete Account
-              </button>
             </div>
           </div>
         </div>
