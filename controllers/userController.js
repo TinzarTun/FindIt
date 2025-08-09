@@ -247,6 +247,21 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+exports.logoutUser = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.params.id },
+    });
+    if (!user || user.id !== req.session.userId) {
+      return res.redirect("/profile");
+    }
+    res.render("user/logout", { user, title: "Logout", error: null });
+  } catch (error) {
+    console.error("Error in logoutUser:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 exports.getEditUser = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
