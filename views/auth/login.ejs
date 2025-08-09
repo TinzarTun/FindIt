@@ -97,34 +97,34 @@
             class="ml-4 text-red-500 hover:text-red-700 text-lg font-normal leading-none"
             aria-label="Close"
           >
-            &times;   
+            &times;
           </button>
         </div>
         <% } %>
 
         <form class="space-y-6" action="/auth/login" method="POST">
-          <!-- Email Field -->
+          <!-- Email or Phone Field -->
           <div class="space-y-2">
-            <label for="email" class="block text-sm font-medium text-gray-700"
-              >Email Address</label
+            <label for="login" class="block text-sm font-medium text-gray-700"
+              >Email or Phone Number</label
             >
             <div class="relative group">
               <div
                 class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
               >
                 <i
-                  data-lucide="mail"
+                  data-lucide="user"
                   class="h-5 w-5 text-gray-400 group-focus-within:text-primary-500 transition-colors"
                 ></i>
               </div>
               <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
+                id="login"
+                name="login"
+                type="text"
+                autocomplete="username"
                 required
                 class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
-                placeholder="Enter your email"
+                placeholder="Enter your email or phone number"
               />
             </div>
           </div>
