@@ -7,7 +7,7 @@ exports.getRegister = (_, res) => {
 };
 
 exports.postRegister = async (req, res) => {
-  const { name, email, password, confirmPassword } = req.body;
+  const { name, email, phone, password, confirmPassword } = req.body;
   if (password !== confirmPassword) {
     return res.status(400).render("auth/register", {
       title: "Register",
@@ -15,14 +15,53 @@ exports.postRegister = async (req, res) => {
     });
   }
   try {
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-    if (existingUser) {
+    let normalizedPhone = "";
+    // Require either email or phone
+    if ((!email || email.trim() === "") && (!phone || phone.trim() === "")) {
       return res.status(400).render("auth/register", {
         title: "Register",
-        error: "Email already in use",
+        error: "Please provide either an email or a phone number",
       });
+    }
+    // If phone provided
+    if (phone && phone.trim() !== "") {
+      normalizedPhone = phone.trim().replace(/[^\d+]/g, ""); // keep only digits and '+'
+
+      if (/^09\d{7,9}$/.test(normalizedPhone)) {
+        // already local format
+      } else if (/^959\d{7,9}$/.test(normalizedPhone)) {
+        normalizedPhone = "0" + normalizedPhone.slice(2);
+      } else if (/^\+959\d{7,9}$/.test(normalizedPhone)) {
+        normalizedPhone = "0" + normalizedPhone.slice(3);
+      } else {
+        return res.status(400).render("auth/register", {
+          title: "Register",
+          error: "Invalid Myanmar phone number format",
+        });
+      }
+    }
+    // Check if email or phone already exists
+    if (email && email.trim() !== "") {
+      const existingUserByEmail = await prisma.user.findUnique({
+        where: { email },
+      });
+      if (existingUserByEmail) {
+        return res.status(400).render("auth/register", {
+          title: "Register",
+          error: "Email already in use",
+        });
+      }
+    }
+    if (normalizedPhone) {
+      const existingUserByPhone = await prisma.user.findUnique({
+        where: { phone: normalizedPhone },
+      });
+      if (existingUserByPhone) {
+        return res.status(400).render("auth/register", {
+          title: "Register",
+          error: "Phone number already in use",
+        });
+      }
     }
     // Find the User role
     const userRole = await prisma.role.findUnique({
@@ -39,7 +78,8 @@ exports.postRegister = async (req, res) => {
     await prisma.user.create({
       data: {
         name,
-        email,
+        email: email?.trim() || null,
+        phone: normalizedPhone || null,
         password: hashedPassword,
         verified: true,
         isDefault: true,
