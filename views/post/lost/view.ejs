@@ -211,7 +211,7 @@
               class="w-6 h-6 rounded-full object-cover"
             />
 
-            <span class="text-sm text-gray-600"><%= item.user.name %></span>
+            <a href="/user/view/<%= item.user.id %>"><span class="text-sm text-gray-600"><%= item.user.name %></span></a>
           </div>
           <a
             href="/lost/detail/<%= item.id %>"

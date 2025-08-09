@@ -44,6 +44,7 @@ const upload = multer({
 router.post("/edit/:id", upload.single("avatar"), userController.editUserInfo); // /user/edit/:id/
 
 router.get("/profile", userController.getUser); // /user/profile
+router.get("/view/:id", userController.getUserById); // /user/view/:id
 router.get("/edit/:id", userController.getEditUser); // /user/edit/:id
 router.post("/edit/:id", userController.editUserInfo); // /user/edit/:id
 router.get("/delete/:id", userController.delete); // /user/delete/:id

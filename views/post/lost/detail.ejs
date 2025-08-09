@@ -293,9 +293,11 @@
                 <% } %>
               </div>
               <div>
-                <h4 id="owner-name" class="font-semibold text-gray-900">
-                  <%= lostItem.user.name %>
-                </h4>
+                <a href="/user/view/<%= lostItem.user.id %>">
+                  <h4 id="owner-name" class="font-semibold text-gray-900">
+                    <%= lostItem.user.name %>
+                  </h4>
+                </a>
                 <div class="flex items-center text-sm text-gray-600">
                   Member since <%= new
                   Date(lostItem.user.createdAt).getFullYear() %>
