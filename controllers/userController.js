@@ -17,19 +17,6 @@ exports.getUser = async (req, res) => {
         lostItems: true,
         foundItems: true,
       },
-      // claims: {
-      //   include: {
-      //     foundItem: true,
-      //     lostItem: true,
-      //   },
-      // },
-      // messages: {
-      //   include: {
-      //     claim: {
-      //       include: { foundItem: true, lostItem: true },
-      //     },
-      //   },
-      // },
     });
 
     // Build activity log
@@ -38,6 +25,7 @@ exports.getUser = async (req, res) => {
     // Found items posted
     user.foundItems.forEach((item) => {
       activities.push({
+        id: item.id,
         type: "found",
         title: "Posted a found item",
         description: `${item.title} found at ${item.foundLocation}`,
@@ -48,34 +36,13 @@ exports.getUser = async (req, res) => {
     // Lost items posted
     user.lostItems.forEach((item) => {
       activities.push({
+        id: item.id,
         type: "lost",
         title: "Reported a lost item",
         description: `${item.title} lost at ${item.lostLocation}`,
         timeAgo: dayjs(item.createdAt).fromNow(),
       });
     });
-
-    // Claims submitted
-    // user.claims.forEach((claim) => {
-    //   const item = claim.foundItem || claim.lostItem;
-    //   activities.push({
-    //     type: "claim",
-    //     title: "Submitted a claim",
-    //     description: `Claimed ${item?.title || "an item"}`,
-    //     timeAgo: dayjs(claim.createdAt).fromNow(),
-    //   });
-    // });
-
-    // Messages sent
-    // user.messages.forEach((msg) => {
-    //   const item = msg.claim.foundItem || msg.claim.lostItem;
-    //   activities.push({
-    //     type: "message",
-    //     title: "Sent a message",
-    //     description: `Regarding ${item?.title || "an item"}`,
-    //     timeAgo: dayjs(msg.createdAt).fromNow(),
-    //   });
-    // });
 
     // Sort by newest activity first
     activities.sort(

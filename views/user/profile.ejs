@@ -177,7 +177,11 @@
             <div class="space-y-4">
               <% if (activities && activities.length > 0) { %> <%
               activities.forEach(activity => { %>
-              <div
+                <a
+                  href="<%= activity.type === 'lost' ? '/lost/detail/' + activity.id : activity.type === 'found' ? '/found/detail/' + activity.id : '#' %>"
+                  class="block"
+                >
+                <div
                 class="flex items-start space-x-4 p-4 rounded-xl <% if (activity.type === 'found') { %> bg-blue-50 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-50 <% } %> <% if (activity.type === 'claim') { %> bg-purple-50 <% } %> <% if (activity.type === 'message') { %> bg-green-50 <% } %>"
               >
                 <div
