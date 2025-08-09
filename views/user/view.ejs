@@ -1,315 +1,255 @@
-<!-- Hero Section -->
 <section class="py-8">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Hero Section -->
     <div
-      class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in"
+      class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-fade-in px-6 sm:px-8 py-8 mb-8"
     >
-      <div class="px-6 sm:px-8 py-8">
-        <!-- Hero Content -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between"
+          class="flex flex-col sm:flex-row items-center sm:items-center space-y-4 sm:space-y-0 sm:space-x-6"
         >
-          <div
-            class="flex flex-col sm:flex-row items-center sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-4 sm:mb-0"
-          >
-            <!-- Avatar with Camera Icon -->
-            <div class="relative group">
-              <% if (user.avatar) { %>
-              <img
-                id="profileImage"
-                src="/uploads/avatar/<%= user.avatar %>?height=120&width=120"
-                alt="Profile Avatar"
-                class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white shadow-lg bg-gray-100"
-              />
+          <!-- Avatar -->
+          <div class="relative group">
+            <% if (user.avatar) { %>
+            <img
+              id="profileImage"
+              src="/uploads/avatar/<%= user.avatar %>?height=120&width=120"
+              alt="Profile Avatar"
+              class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg bg-gray-100"
+            />
+            <% } else { %>
+            <img
+              id="profileImage"
+              src="https://cdn-icons-png.flaticon.com/512/847/847969.png?height=120&width=120"
+              alt="Profile Avatar"
+              class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg bg-gray-100"
+            />
+            <% } %>
+          </div>
+
+          <!-- User Info -->
+          <div class="text-center sm:text-left">
+            <h1 class="text-3xl font-bold text-gray-900"><%= user.name %></h1>
+            <p class="text-lg text-gray-600"><%= user.email %></p>
+            <div
+              class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2"
+            >
+              <% if (user.verified) { %>
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+              >
+                <i data-lucide="check-circle" class="h-3 w-3 mr-1"></i>
+                Verified
+              </span>
               <% } else { %>
-              <img
-                id="profileImage"
-                src="https://cdn-icons-png.flaticon.com/512/847/847969.png?height=120&width=120"
-                alt="Profile Avatar"
-                class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white shadow-lg bg-gray-100"
-              />
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
+              >
+                <i data-lucide="hourglass" class="h-3 w-3 mr-1"></i>
+                Pending
+              </span>
               <% } %>
-            </div>
-            <!-- User Info -->
-            <div class="text-center sm:text-left">
-              <h1
-                class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900"
-              >
-                <%= user.name %>
-              </h1>
-              <p class="text-base sm:text-lg text-gray-600">
-                <%= user.email %>
-              </p>
-              <div
-                class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2"
-              >
-                <% if (user.verified === true ) { %>
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
-                >
-                  <i data-lucide="check-circle" class="h-3 w-3 mr-1"></i>
-                  Verified
-                </span>
-                <% } else { %>
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
-                >
-                  <i data-lucide="hourglass" class="h-3 w-3 mr-1"></i>
-                  Pending
-                </span>
-                <% } %>
-                <span class="text-sm text-gray-500 flex items-center">
-                  <i data-lucide="calendar" class="h-3 w-3 mr-1"></i>
-                  Member since <%= formattedDate %>
-                </span>
-              </div>
+              <span class="text-sm text-gray-500 flex items-center">
+                <i data-lucide="calendar" class="h-3 w-3 mr-1"></i>
+                Member since <%= formattedDate %>
+              </span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- Profile Content -->
-<section class="py-8">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Main Grid -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-      <!-- Main Content -->
-      <div class="xl:col-span-2 space-y-8">
-        <!-- Personal Information -->
-        <div
-          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-left"
-        >
-          <div class="px-6 sm:px-8 py-6 border-b border-gray-100 bg-gray-50">
-            <h3 class="text-xl font-bold text-gray-900 flex items-center">
-              <i data-lucide="user" class="h-5 w-5 mr-2 text-primary-600"></i>
-              Personal Information
-            </h3>
-          </div>
-          <div class="px-6 sm:px-8 py-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-gray-700"
-                  >Full Name</label
-                >
-                <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
-                  <%= user.name %>
-                </p>
-              </div>
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-gray-700"
-                  >Email Address</label
-                >
-                <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
-                  <%= user.email || "-" %>
-                </p>
-              </div>
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-gray-700"
-                  >Phone Number</label
-                >
-                <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
-                  <%= formattedPhone %>
-                </p>
-              </div>
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-gray-700"
-                  >Country</label
-                >
-                <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
-                  <%= user.country %>
-                </p>
-              </div>
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-gray-700"
-                  >Region/State</label
-                >
-                <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
-                  <%= user.region || "-" %>
-                </p>
-              </div>
-              <div class="space-y-2">
-                <label class="block text-sm font-semibold text-gray-700"
-                  >City</label
-                >
-                <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
-                  <%= user.city || "-" %>
-                </p>
-              </div>
-              <div class="sm:col-span-2 space-y-2">
-                <label class="block text-sm font-semibold text-gray-700"
-                  >Address</label
-                >
-                <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
-                  <%= user.address || "-" %>
-                </p>
-              </div>
-            </div>
-          </div>
+    <!-- Personal Information Section -->
+    <div
+      class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-left px-6 sm:px-8 py-8 mb-8"
+    >
+      <h3 class="text-xl font-bold text-gray-900 flex items-center mb-6">
+        <i data-lucide="user" class="h-5 w-5 mr-2 text-primary-600"></i>
+        Personal Information
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Full Name
+          </label>
+          <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
+            <%= user.name %>
+          </p>
         </div>
-
-        <!-- Recent Activity -->
-        <div
-          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-left"
-        >
-          <div class="px-6 sm:px-8 py-6 border-b border-gray-100 bg-gray-50">
-            <h3 class="text-xl font-bold text-gray-900 flex items-center">
-              <i
-                data-lucide="activity"
-                class="h-5 w-5 mr-2 text-primary-600"
-              ></i>
-              Recent Activity
-            </h3>
-          </div>
-          <div class="px-6 sm:px-8 py-8">
-            <div class="space-y-4">
-              <% if (activities && activities.length > 0) { %> <%
-              activities.forEach(activity => { %>
-                <a
-                  href="<%= activity.type === 'lost' ? '/lost/detail/' + activity.id : activity.type === 'found' ? '/found/detail/' + activity.id : '#' %>"
-                  class="block"
-                >
-                <div
-                class="flex items-start space-x-4 p-4 rounded-xl <% if (activity.type === 'found') { %> bg-blue-50 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-50 <% } %> <% if (activity.type === 'claim') { %> bg-purple-50 <% } %> <% if (activity.type === 'message') { %> bg-green-50 <% } %>"
-              >
-                <div
-                  class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 <% if (activity.type === 'found') { %> bg-blue-100 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-100 <% } %> <% if (activity.type === 'claim') { %> bg-purple-100 <% } %> <% if (activity.type === 'message') { %> bg-green-100 <% } %>"
-                >
-                  <% if (activity.type === 'found') { %>
-                  <i
-                    data-lucide="search-check"
-                    class="h-4 w-4 text-blue-600"
-                  ></i>
-                  <% } else if (activity.type === 'lost') { %>
-                  <i
-                    data-lucide="alert-triangle"
-                    class="h-4 w-4 text-yellow-600"
-                  ></i>
-                  <% } else if (activity.type === 'claim') { %>
-                  <i
-                    data-lucide="file-text"
-                    class="h-4 w-4 text-purple-600"
-                  ></i>
-                  <% } else if (activity.type === 'message') { %>
-                  <i
-                    data-lucide="message-square"
-                    class="h-4 w-4 text-green-600"
-                  ></i>
-                  <% } %>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm font-medium text-gray-900">
-                    <%= activity.title %>
-                  </p>
-                  <p class="text-sm text-gray-600">
-                    <%= activity.description %>
-                  </p>
-                  <p class="text-xs text-gray-500 mt-1">
-                    <%= activity.timeAgo %>
-                  </p>
-                </div>
-              </div>
-              <% }) %> <% } else { %>
-              <p class="text-sm text-gray-500">No recent activity yet.</p>
-              <% } %>
-            </div>
-          </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Email Address
+          </label>
+          <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
+            <%= user.email || "-" %>
+          </p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Phone Number
+          </label>
+          <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
+            <%= formattedPhone %>
+          </p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Country
+          </label>
+          <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
+            <%= user.country %>
+          </p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Region/State
+          </label>
+          <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
+            <%= user.region || "-" %>
+          </p>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            City
+          </label>
+          <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
+            <%= user.city || "-" %>
+          </p>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-sm font-semibold text-gray-700 mb-2"
+            >Address</label
+          >
+          <p class="text-gray-900 bg-gray-50 px-4 py-3 rounded-lg">
+            <%= user.address || "-" %>
+          </p>
         </div>
       </div>
+    </div>
 
-      <!-- Sidebar -->
-      <div class="space-y-8">
-        <!-- Statistics -->
-        <div
-          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-right"
-        >
-          <div class="px-6 py-6 border-b border-gray-100 bg-gray-50">
-            <h3 class="text-xl font-bold text-gray-900 flex items-center">
-              <i
-                data-lucide="bar-chart-3"
-                class="h-5 w-5 mr-2 text-primary-600"
-              ></i>
-              Statistics
-            </h3>
+    <!-- Statistics Section -->
+    <div
+      class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-right px-6 sm:px-8 py-8 mb-8"
+    >
+      <h3 class="text-xl font-bold text-gray-900 flex items-center mb-6">
+        <i data-lucide="bar-chart-3" class="h-5 w-5 mr-2 text-primary-600"></i>
+        Statistics
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="p-4 bg-red-50 rounded-xl flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center"
+            >
+              <i data-lucide="search-x" class="h-5 w-5 text-red-600"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700">Lost Items</span>
           </div>
-          <div class="px-6 py-8">
-            <div class="space-y-6">
-              <div
-                class="flex items-center justify-between p-4 bg-red-50 rounded-xl"
-              >
-                <div class="flex items-center space-x-3">
-                  <div
-                    class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center"
-                  >
-                    <i data-lucide="search-x" class="h-5 w-5 text-red-600"></i>
-                  </div>
-                  <span class="text-sm font-medium text-gray-700"
-                    >Lost Items</span
-                  >
-                </div>
-                <span class="text-2xl font-bold text-gray-900"
-                  ><%= user.lostItems.length %></span
-                >
-              </div>
-              <div
-                class="flex items-center justify-between p-4 bg-green-50 rounded-xl"
-              >
-                <div class="flex items-center space-x-3">
-                  <div
-                    class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center"
-                  >
-                    <i
-                      data-lucide="search-check"
-                      class="h-5 w-5 text-green-600"
-                    ></i>
-                  </div>
-                  <span class="text-sm font-medium text-gray-700"
-                    >Found Items</span
-                  >
-                </div>
-                <span class="text-2xl font-bold text-gray-900"
-                  ><%= user.foundItems.length %></span
-                >
-              </div>
-              <div
-                class="flex items-center justify-between p-4 bg-blue-50 rounded-xl"
-              >
-                <div class="flex items-center space-x-3">
-                  <div
-                    class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"
-                  >
-                    <i
-                      data-lucide="file-text"
-                      class="h-5 w-5 text-blue-600"
-                    ></i>
-                  </div>
-                  <span class="text-sm font-medium text-gray-700"
-                    >Claims Made</span
-                  >
-                </div>
-                <span class="text-2xl font-bold text-gray-900">0</span>
-              </div>
-              <div
-                class="flex items-center justify-between p-4 bg-purple-50 rounded-xl"
-              >
-                <div class="flex items-center space-x-3">
-                  <div
-                    class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center"
-                  >
-                    <i
-                      data-lucide="check-circle"
-                      class="h-5 w-5 text-purple-600"
-                    ></i>
-                  </div>
-                  <span class="text-sm font-medium text-gray-700">Returns</span>
-                </div>
-                <span class="text-2xl font-bold text-gray-900">0</span>
-              </div>
+          <span class="text-2xl font-bold text-gray-900"
+            ><%= (user.lostItems && user.lostItems.length) || 0 %></span
+          >
+        </div>
+
+        <div
+          class="p-4 bg-green-50 rounded-xl flex items-center justify-between"
+        >
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center"
+            >
+              <i data-lucide="search-check" class="h-5 w-5 text-green-600"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700">Found Items</span>
+          </div>
+          <span class="text-2xl font-bold text-gray-900"
+            ><%= (user.foundItems && user.foundItems.length) || 0 %></span
+          >
+        </div>
+
+        <div
+          class="p-4 bg-blue-50 rounded-xl flex items-center justify-between"
+        >
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center"
+            >
+              <i data-lucide="file-text" class="h-5 w-5 text-blue-600"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700">Claims Made</span>
+          </div>
+          <span class="text-2xl font-bold text-gray-900"
+            ><%= (user.claims && user.claims.length) || 0 %></span
+          >
+        </div>
+
+        <div
+          class="p-4 bg-purple-50 rounded-xl flex items-center justify-between"
+        >
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center"
+            >
+              <i data-lucide="check-circle" class="h-5 w-5 text-purple-600"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700">Returns</span>
+          </div>
+          <span class="text-2xl font-bold text-gray-900"
+            ><%= (user.returns && user.returns.length) || 0 %></span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div
+      class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-slide-in-left px-6 sm:px-8 py-8"
+    >
+      <h3 class="text-xl font-bold text-gray-900 flex items-center mb-6">
+        <i data-lucide="activity" class="h-5 w-5 mr-2 text-primary-600"></i>
+        Recent Activity
+      </h3>
+      <div class="space-y-4">
+        <% if (activities && activities.length > 0) { %> <%
+        activities.forEach(activity => { %>
+        <a
+          href="<%= activity.type === 'lost' ? '/lost/detail/' + activity.id : activity.type === 'found' ? '/found/detail/' + activity.id : '#' %>"
+          class="block"
+        >
+          <div
+            class="flex items-start space-x-4 p-4 rounded-xl <% if (activity.type === 'found') { %> bg-blue-50 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-50 <% } %> <% if (activity.type === 'claim') { %> bg-purple-50 <% } %> <% if (activity.type === 'message') { %> bg-green-50 <% } %>"
+          >
+            <div
+              class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 <% if (activity.type === 'found') { %> bg-blue-100 <% } %> <% if (activity.type === 'lost') { %> bg-yellow-100 <% } %> <% if (activity.type === 'claim') { %> bg-purple-100 <% } %> <% if (activity.type === 'message') { %> bg-green-100 <% } %>"
+            >
+              <% if (activity.type === 'found') { %>
+              <i data-lucide="search-check" class="h-4 w-4 text-blue-600"></i>
+              <% } else if (activity.type === 'lost') { %>
+              <i
+                data-lucide="alert-triangle"
+                class="h-4 w-4 text-yellow-600"
+              ></i>
+              <% } else if (activity.type === 'claim') { %>
+              <i data-lucide="file-text" class="h-4 w-4 text-purple-600"></i>
+              <% } else if (activity.type === 'message') { %>
+              <i
+                data-lucide="message-square"
+                class="h-4 w-4 text-green-600"
+              ></i>
+              <% } %>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-gray-900">
+                <%= activity.title %>
+              </p>
+              <p class="text-sm text-gray-600"><%= activity.description %></p>
+              <p class="text-xs text-gray-500 mt-1"><%= activity.timeAgo %></p>
             </div>
           </div>
-        </div>
+        </a>
+        <% }) %> <% } else { %>
+        <p class="text-sm text-gray-500">No recent activity yet.</p>
+        <% } %>
       </div>
     </div>
   </div>
