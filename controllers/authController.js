@@ -98,36 +98,81 @@ exports.getLogin = (req, res) => {
 };
 
 exports.postLogin = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await prisma.user.findUnique({
-    where: { email },
-    include: { role: true },
-  });
-  if (!user) {
-    return res.status(401).render("auth/login", {
+  const { login, password } = req.body;
+
+  if (!login || !password) {
+    return res.status(400).render("auth/login", {
       title: "Login",
-      error: "Email not found",
+      error: "Please provide both login and password",
     });
   }
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    return res.status(401).render("auth/login", {
-      title: "Login",
-      error: "Incorrect password",
-    });
-  }
-  if (user && isMatch) {
+
+  try {
+    let user;
+
+    // Simple email regex test
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(login);
+
+    if (isEmail) {
+      user = await prisma.user.findUnique({
+        where: { email: login.trim().toLowerCase() },
+        include: { role: true },
+      });
+    } else {
+      // Normalize phone like in registration (optional)
+      let normalizedPhone = login.trim().replace(/[^\d+]/g, "");
+      if (/^09\d{7,9}$/.test(normalizedPhone)) {
+        // already local format
+      } else if (/^959\d{7,9}$/.test(normalizedPhone)) {
+        normalizedPhone = "0" + normalizedPhone.slice(2);
+      } else if (/^\+959\d{7,9}$/.test(normalizedPhone)) {
+        normalizedPhone = "0" + normalizedPhone.slice(3);
+      } else {
+        return res.status(400).render("auth/login", {
+          title: "Login",
+          error: "Invalid phone number format",
+        });
+      }
+
+      user = await prisma.user.findFirst({
+        where: { phone: normalizedPhone },
+        include: { role: true },
+      });
+    }
+
+    if (!user) {
+      return res.status(401).render("auth/login", {
+        title: "Login",
+        error: isEmail ? "Email not found" : "Phone number not found",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).render("auth/login", {
+        title: "Login",
+        error: "Incorrect password",
+      });
+    }
+
+    // Set session
     req.session.userId = user.id;
     req.session.name = user.name;
     req.session.role = user.role.name;
+
     // Redirect based on role
     if (user.role.name === "Admin") {
       return res.redirect("/index.html");
     } else {
       return res.redirect("/user/profile");
     }
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).render("auth/login", {
+      title: "Login",
+      error: "An error occurred during login",
+    });
   }
-  return res.redirect("/auth/login");
 };
 
 exports.logout = (req, res) => {
