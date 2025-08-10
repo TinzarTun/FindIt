@@ -39,7 +39,12 @@
             <% } %>
             <div class="text-left">
               <p class="font-semibold text-gray-900"><%= user.name %></p>
-              <p class="text-sm text-gray-600"><%= user.email %></p>
+              <p class="text-sm text-gray-600">
+                <% if (user.email && user.phone) { %> <%= user.email %> <% }
+                else if (user.email) { %> <%= user.email %> <% } else if
+                (user.phone) { %> <%= user.phone ? '+95' + user.phone.slice(1) :
+                '' %> <% } else { %> No contact info available. <% } %>
+              </p>
             </div>
           </div>
         </div>

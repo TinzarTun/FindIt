@@ -299,14 +299,16 @@
             <!-- Owner Info -->
             <div class="flex items-center space-x-3 mb-6">
               <div class="relative">
-                <img
-                  id="owner-avatar"
-                  src="<%= foundItem.user.avatar 
+                <a href="/user/view/<%= foundItem.user.id %>">
+                  <img
+                    id="owner-avatar"
+                    src="<%= foundItem.user.avatar 
                     ? '/uploads/avatar/' + foundItem.user.avatar + '?height=50&width=50'
                     : 'https://cdn-icons-png.flaticon.com/512/847/847969.png?height=50&width=50' %>"
-                  alt="<%= foundItem.user.name %>"
-                  class="w-12 h-12 rounded-full border-2 border-gray-200"
-                />
+                    alt="<%= foundItem.user.name %>"
+                    class="w-12 h-12 rounded-full border-2 border-gray-200"
+                  />
+                </a>
                 <!-- Verified Badge -->
                 <% if (foundItem.user.verified) { %>
                 <div
