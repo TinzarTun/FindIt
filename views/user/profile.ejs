@@ -38,7 +38,10 @@
                 <%= user.name %>
               </h1>
               <p class="text-base sm:text-lg text-gray-600">
-                <%= user.email %>
+                <% if (user.email && formattedPhone) { %> <%= user.email %> <% }
+                else if (user.email) { %> <%= user.email %> <% } else if
+                (formattedPhone) { %> <%= formattedPhone %> <% } else { %> No
+                contact info available. <% } %>
               </p>
               <div
                 class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2"
@@ -341,7 +344,7 @@
                 <span class="text-sm font-medium text-gray-700"
                   >Email Verified</span
                 >
-                <% if (user.email !== "-") { %>
+                <% if (user.email && user.email.trim() !== "-" ) { %>
                 <span
                   class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
                 >

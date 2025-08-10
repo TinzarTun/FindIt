@@ -1,5 +1,4 @@
-<!-- Main Content -->
-<main class="min-h-screen flex">
+<div class="min-h-screen flex">
   <!-- Left Side - Registration Form -->
   <div
     class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50 animate-slide-in-left"
@@ -63,7 +62,7 @@
           </div>
 
           <!-- Email Field -->
-          <div class="relative group">
+          <div id="emailField" class="relative group mb-2">
             <div
               class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
             >
@@ -77,11 +76,54 @@
               name="email"
               type="email"
               autocomplete="email"
-              required
               class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
               placeholder="Email address"
             />
           </div>
+
+          <!-- Link to use phone instead -->
+          <p id="usePhoneWrapper" class="text-sm text-gray-500 mb-4">
+            Don’t have an email?
+            <button
+              type="button"
+              id="usePhoneLink"
+              class="text-primary-600 hover:underline"
+            >
+              Use phone number instead
+            </button>
+          </p>
+
+          <!-- Phone Field (hidden by default) -->
+          <div id="phoneField" class="relative group mb-2 hidden">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+            >
+              <i
+                data-lucide="phone"
+                class="h-5 w-5 text-gray-400 group-focus-within:text-primary-500 transition-colors"
+              ></i>
+            </div>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              class="block w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:border-gray-400"
+              placeholder="Phone number"
+            />
+          </div>
+
+          <!-- Link to use email instead (hidden by default) -->
+          <p id="useEmailWrapper" class="text-sm text-gray-500 mb-4 hidden">
+            Prefer to use email?
+            <button
+              type="button"
+              id="useEmailLink"
+              class="text-primary-600 hover:underline"
+            >
+              Use email instead
+            </button>
+          </p>
 
           <!-- Password Field -->
           <div class="relative group">
@@ -280,4 +322,27 @@
       </div>
     </div>
   </div>
-</main>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const emailField = document.getElementById("emailField");
+    const phoneField = document.getElementById("phoneField");
+    const usePhoneWrapper = document.getElementById("usePhoneWrapper");
+    const useEmailWrapper = document.getElementById("useEmailWrapper");
+
+    document.getElementById("usePhoneLink").addEventListener("click", () => {
+      emailField.classList.add("hidden");
+      usePhoneWrapper.classList.add("hidden");
+      phoneField.classList.remove("hidden");
+      useEmailWrapper.classList.remove("hidden");
+    });
+
+    document.getElementById("useEmailLink").addEventListener("click", () => {
+      phoneField.classList.add("hidden");
+      useEmailWrapper.classList.add("hidden");
+      emailField.classList.remove("hidden");
+      usePhoneWrapper.classList.remove("hidden");
+    });
+  });
+</script>
