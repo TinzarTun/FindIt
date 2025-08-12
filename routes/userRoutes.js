@@ -48,7 +48,8 @@ router.get("/view/:id", userController.getUserById); // /user/view/:id
 router.get("/logout/:id", userController.logoutUser); // /user/logout/:id
 router.get("/edit/:id", userController.getEditUser); // /user/edit/:id
 router.post("/edit/:id", userController.editUserInfo); // /user/edit/:id
-router.get("/delete/:id", userController.delete); // /user/delete/:id
+router.get("/delete/:id", userController.getDeleteUser); // /user/delete/:id
+router.post("/delete/:id", userController.postDeleteUser); // /user/delete/:id
 
 // Error handler for multer
 router.use(async (err, req, res, next) => {

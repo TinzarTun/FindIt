@@ -50,9 +50,14 @@ async function resetDatabase() {
       __dirname,
       "../FindIt/public/uploads/lost-items"
     );
+    const foundItemsPath = path.join(
+      __dirname,
+      "../FindIt/public/uploads/found-items"
+    );
 
     await deleteFilesInDirectory(avatarPath);
     await deleteFilesInDirectory(lostItemsPath);
+    await deleteFilesInDirectory(foundItemsPath);
 
     console.log("All uploaded files deleted.");
   } catch (error) {
