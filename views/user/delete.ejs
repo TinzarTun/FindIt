@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Account - FindIt</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: "#eff6ff",
+              500: "#3b82f6",
+              600: "#2563eb",
+              700: "#1d4ed8",
+              800: "#1e40af",
+            },
+          },
+          fontFamily: {
+            sans: ["Poppins", "system-ui", "sans-serif"],
+          },
+          animation: {
+            "fade-in": "fadeIn 0.6s ease-out",
+            "slide-in": "slideIn 0.5s ease-out",
+            "pulse-slow": "pulse 3s ease-in-out infinite",
+            "shake": "shake 0.5s ease-in-out",
+          },
+          keyframes: {
+            fadeIn: {
+              "0%": { opacity: "0", transform: "translateY(20px)" },
+              "100%": { opacity: "1", transform: "translateY(0)" },
+            },
+            slideIn: {
+              "0%": { opacity: "0", transform: "translateX(-20px)" },
+              "100%": { opacity: "1", transform: "translateX(0)" },
+            },
+            shake: {
+              "0%, 100%": { transform: "translateX(0)" },
+              "25%": { transform: "translateX(-5px)" },
+              "75%": { transform: "translateX(5px)" },
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body class="bg-gradient-to-br from-red-50 to-gray-100 min-h-screen">
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg shadow-sm border-b border-gray-200">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <i data-lucide="search" class="h-8 w-8 text-primary-600"></i>
+            <a href="/" class="ml-2 text-xl font-bold text-gray-900">FindIt</a>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="profile.html" class="text-gray-500 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            <i data-lucide="arrow-left" class="h-4 w-4 mr-1 inline"></i>
+            Back to Profile
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-16 min-h-screen flex items-center justify-center py-8">
+    <div class="max-w-lg w-full mx-4">
+      
+      <!-- Delete Account Warning Card -->
+      <div class="bg-white rounded-2xl shadow-xl border border-red-200 overflow-hidden animate-fade-in">
+        <div class="px-6 py-8">
+          
+          <!-- Warning Icon -->
+          <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-slow">
+            <i data-lucide="alert-triangle" class="h-10 w-10 text-red-600"></i>
+          </div>
+          
+          <!-- Title and Warning -->
+          <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-900 mb-3">Delete Account</h1>
+            <p class="text-gray-600 mb-4">This action cannot be undone. Please read the information below carefully.</p>
+            
+            <!-- Critical Warning -->
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
+              <div class="flex items-start">
+                <i data-lucide="alert-circle" class="h-5 w-5 text-red-600 mt-0.5 mr-3 flex-shrink-0"></i>
+                <div>
+                  <h4 class="text-sm font-semibold text-red-900 mb-2">⚠️ PERMANENT DELETION WARNING</h4>
+                  <p class="text-sm text-red-800 mb-3">Once you delete your account, there is no going back. This will permanently:</p>
+                  <ul class="text-xs text-red-700 space-y-1 ml-4">
+                    <li>• Delete all your personal information and profile data</li>
+                    <li>• Remove all your posted lost and found items</li>
+                    <li>• Cancel all active claims and conversations</li>
+                    <li>• Erase your account history and statistics</li>
+                    <li>• Revoke access to all FindIt services</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Summary -->
+          <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <h4 class="font-semibold text-gray-900 mb-3 text-center">Account Summary</h4>
+            <div class="grid grid-cols-2 gap-4 text-center">
+              <div class="bg-white rounded-lg p-3">
+                <div class="text-2xl font-bold text-red-600">5</div>
+                <div class="text-xs text-gray-600">Lost Items</div>
+              </div>
+              <div class="bg-white rounded-lg p-3">
+                <div class="text-2xl font-bold text-green-600">12</div>
+                <div class="text-xs text-gray-600">Found Items</div>
+              </div>
+              <div class="bg-white rounded-lg p-3">
+                <div class="text-2xl font-bold text-blue-600">8</div>
+                <div class="text-xs text-gray-600">Active Claims</div>
+              </div>
+              <div class="bg-white rounded-lg p-3">
+                <div class="text-2xl font-bold text-purple-600">15</div>
+                <div class="text-xs text-gray-600">Successful Returns</div>
+              </div>
+            </div>
+            <p class="text-xs text-gray-600 text-center mt-3">All this data will be permanently lost</p>
+          </div>
+
+          <!-- Confirmation Form -->
+          <form id="deleteForm" class="space-y-6">
+            <!-- Password Confirmation -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Confirm your password *</label>
+              <div class="relative">
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  required
+                  class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
+                  placeholder="Enter your current password"
+                />
+                <button
+                  type="button"
+                  onclick="togglePassword('confirmPassword')"
+                  class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <i data-lucide="eye" class="h-5 w-5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Type DELETE confirmation -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                Type <span class="font-mono bg-gray-100 px-2 py-1 rounded text-red-600">DELETE</span> to confirm *
+              </label>
+              <input
+                type="text"
+                id="deleteConfirmation"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors font-mono"
+                placeholder="Type DELETE here"
+                oninput="validateDeleteText()"
+              />
+              <div id="deleteTextError" class="mt-1 text-xs text-red-500 hidden">
+                Please type "DELETE" exactly as shown
+              </div>
+            </div>
+
+            <!-- Reason for deletion -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">Reason for deletion (optional)</label>
+              <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors">
+                <option value="">Select a reason...</option>
+                <option value="privacy">Privacy concerns</option>
+                <option value="not-useful">Service not useful</option>
+                <option value="too-many-emails">Too many emails</option>
+                <option value="found-alternative">Found alternative service</option>
+                <option value="temporary">Temporary deletion</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <!-- Final confirmation checkbox -->
+            <div class="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="finalConfirmation"
+                required
+                class="mt-1 h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+              />
+              <label for="finalConfirmation" class="text-sm text-gray-700">
+                I understand that this action is permanent and irreversible. I want to permanently delete my FindIt account and all associated data.
+              </label>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col space-y-3 pt-6 border-t border-gray-200">
+              <button
+                type="submit"
+                id="deleteBtn"
+                disabled
+                class="w-full px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 hover:shadow-lg transform hover:scale-105 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:bg-red-600"
+              >
+                <i data-lucide="trash-2" class="h-4 w-4 mr-2 inline"></i>
+                Permanently Delete Account
+              </button>
+              <button
+                type="button"
+                onclick="window.location.href='profile.html'"
+                class="w-full px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              >
+                <i data-lucide="arrow-left" class="h-4 w-4 mr-2 inline"></i>
+                Cancel - Keep My Account
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Alternative Options -->
+      <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 animate-slide-in">
+        <div class="text-center">
+          <h4 class="text-sm font-semibold text-blue-900 mb-2">Consider These Alternatives</h4>
+          <div class="space-y-2">
+            <button
+              onclick="window.location.href='updatePassword.html'"
+              class="text-blue-700 hover:text-blue-800 text-sm font-medium transition-colors block mx-auto"
+            >
+              <i data-lucide="key" class="h-4 w-4 mr-1 inline"></i>
+              Change Password Instead
+            </button>
+            <button
+              onclick="window.location.href='editProfile.html'"
+              class="text-blue-700 hover:text-blue-800 text-sm font-medium transition-colors block mx-auto"
+            >
+              <i data-lucide="edit" class="h-4 w-4 mr-1 inline"></i>
+              Update Privacy Settings
+            </button>
+            <button class="text-blue-700 hover:text-blue-800 text-sm font-medium transition-colors block mx-auto">
+              <i data-lucide="pause" class="h-4 w-4 mr-1 inline"></i>
+              Temporarily Deactivate Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Delete Processing Modal -->
+  <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full">
+      <div class="px-6 py-8 text-center">
+        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="loader-2" class="h-8 w-8 text-red-600 animate-spin"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Deleting Account...</h3>
+        <p class="text-gray-600 text-sm mb-4">Please wait while we process your request</p>
+        
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div id="deleteProgressBar" class="h-2 bg-red-600 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">This may take a few moments...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <div class="flex items-center justify-center mb-4">
+          <i data-lucide="search" class="h-6 w-6 text-primary-400"></i>
+          <span class="ml-2 text-lg font-bold">FindIt</span>
+        </div>
+        <p class="text-gray-400 text-sm">
+          Helping reunite lost items with their owners
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Toggle password visibility
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      const button = field.nextElementSibling.querySelector('i');
+      
+      if (field.type === 'password') {
+        field.type = 'text';
+        button.setAttribute('data-lucide', 'eye-off');
+      } else {
+        field.type = 'password';
+        button.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
+
+    // Validate DELETE text input
+    function validateDeleteText() {
+      const input = document.getElementById('deleteConfirmation');
+      const error = document.getElementById('deleteTextError');
+      const deleteBtn = document.getElementById('deleteBtn');
+      
+      if (input.value === 'DELETE') {
+        error.classList.add('hidden');
+        input.classList.remove('border-red-500');
+        input.classList.add('border-green-500');
+        checkFormValidity();
+      } else {
+        if (input.value.length > 0) {
+          error.classList.remove('hidden');
+          input.classList.add('border-red-500');
+          input.classList.remove('border-green-500');
+        } else {
+          error.classList.add('hidden');
+          input.classList.remove('border-red-500', 'border-green-500');
+        }
+        deleteBtn.disabled = true;
+      }
+    }
+
+    // Check overall form validity
+    function checkFormValidity() {
+      const password = document.getElementById('confirmPassword').value;
+      const deleteText = document.getElementById('deleteConfirmation').value;
+      const checkbox = document.getElementById('finalConfirmation').checked;
+      const deleteBtn = document.getElementById('deleteBtn');
+      
+      if (password && deleteText === 'DELETE' && checkbox) {
+        deleteBtn.disabled = false;
+      } else {
+        deleteBtn.disabled = true;
+      }
+    }
+
+    // Add event listeners for form validation
+    document.getElementById('confirmPassword').addEventListener('input', checkFormValidity);
+    document.getElementById('finalConfirmation').addEventListener('change', checkFormValidity);
+
+    // Handle form submission
+    document.getElementById('deleteForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const password = document.getElementById('confirmPassword').value;
+      const deleteText = document.getElementById('deleteConfirmation').value;
+      const checkbox = document.getElementById('finalConfirmation').checked;
+      
+      // Final validation
+      if (!password || deleteText !== 'DELETE' || !checkbox) {
+        showErrorMessage('Please complete all required fields correctly');
+        return;
+      }
+      
+      // Show final confirmation
+      if (confirm('This is your FINAL WARNING. Are you absolutely sure you want to permanently delete your account? This action CANNOT be undone.')) {
+        performAccountDeletion();
+      }
+    });
+
+    // Perform account deletion
+    function performAccountDeletion() {
+      // Show delete modal
+      document.getElementById('deleteModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      
+      // Animate progress bar
+      const progressBar = document.getElementById('deleteProgressBar');
+      let progress = 0;
+      
+      const interval = setInterval(() => {
+        progress += 10;
+        progressBar.style.width = progress + '%';
+        
+        if (progress >= 100) {
+          clearInterval(interval);
+          
+          // Simulate deletion process
+          setTimeout(() => {
+            // In real app, make API call to delete account
+            // Clear all stored data
+            // localStorage.clear();
+            // sessionStorage.clear();
+            
+            // Show final message
+            showFinalMessage();
+          }, 1000);
+        }
+      }, 300);
+    }
+
+    // Show final deletion message
+    function showFinalMessage() {
+      // Hide delete modal
+      document.getElementById('deleteModal').classList.add('hidden');
+      
+      const finalDiv = document.createElement('div');
+      finalDiv.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+      finalDiv.innerHTML = `
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="check-circle" class="h-8 w-8 text-green-600"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Account Deleted</h3>
+          <p class="text-gray-600 mb-6">Your FindIt account has been permanently deleted. We're sorry to see you go.</p>
+          <p class="text-sm text-gray-500 mb-6">Thank you for being part of our community. If you change your mind, you're always welcome to create a new account.</p>
+          <button onclick="window.location.href='/'" class="w-full px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium">
+            Return to Homepage
+          </button>
+        </div>
+      `;
+      document.body.appendChild(finalDiv);
+      lucide.createIcons();
+      
+      // Auto redirect after 10 seconds
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 10000);
+    }
+
+    // Error message function
+    function showErrorMessage(message) {
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'fixed top-20 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in animate-shake';
+      errorDiv.innerHTML = `
+        <div class="flex items-center">
+          <i data-lucide="x-circle" class="h-5 w-5 mr-2"></i>
+          ${message}
+        </div>
+      `;
+      document.body.appendChild(errorDiv);
+      lucide.createIcons();
+      
+      setTimeout(() => {
+        errorDiv.remove();
+      }, 4000);
+    }
+
+    // Handle keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // ESC key to cancel
+      if (e.key === 'Escape') {
+        window.location.href = 'profile.html';
+      }
+    });
+
+    // Prevent accidental page refresh
+    window.addEventListener('beforeunload', function(e) {
+      const formData = new FormData(document.getElementById('deleteForm'));
+      let hasData = false;
+      for (let [key, value] of formData.entries()) {
+        if (value) {
+          hasData = true;
+          break;
+        }
+      }
+      
+      if (hasData) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+  </script>
+</body>
+</html>
