@@ -381,7 +381,26 @@ exports.editUserInfo = async (req, res) => {
   }
 };
 
-exports.delete = async (req, res) => {
+exports.getDeleteUser = async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.params.id },
+      include: {
+        lostItems: true,
+        foundItems: true,
+      },
+    });
+    if (!user || user.id !== req.session.userId) {
+      return res.redirect("/profile");
+    }
+    res.render("user/delete", { user, title: "Delete Account", error: null });
+  } catch (error) {
+    console.error("Error in getDeleteUser:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+exports.postDeleteUser = async (req, res) => {
   const { id } = req.params;
 
   if (req.session.userId !== id) {
