@@ -1,6 +1,7 @@
 const session = require("express-session");
 const PrismaClient = require("@prisma/client").PrismaClient;
 const prisma = new PrismaClient();
+const bcrypt = require("bcryptjs");
 
 const dayjs = require("dayjs");
 const relativeTime = require("dayjs/plugin/relativeTime.js");
@@ -356,6 +357,26 @@ exports.editUserInfo = async (req, res) => {
       });
     }
 
+    // check for duplicate phone number
+    if (normalizedPhone) {
+      const userWithSamePhone = await prisma.user.findFirst({
+        where: {
+          phone: normalizedPhone,
+          AND: {
+            id: { not: id },
+          }, // exclude current user
+        },
+      });
+
+      if (userWithSamePhone) {
+        return res.status(400).render("user/edit", {
+          user: existingUser,
+          title: "Edit Profile",
+          error: "This phone number is already in use by another account.",
+        });
+      }
+    }
+
     const updateData = {
       name,
       email,
@@ -401,7 +422,11 @@ exports.getDeleteUser = async (req, res) => {
 };
 
 exports.postDeleteUser = async (req, res) => {
+  const { confirmPassword, deleteConfirmation } = req.body;
   const { id } = req.params;
+
+  const { promises: fs } = require("fs");
+  const path = require("path");
 
   if (req.session.userId !== id) {
     return res.status(403).json({ error: "Unauthorized" });
@@ -410,28 +435,93 @@ exports.postDeleteUser = async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id },
+      include: {
+        lostItems: true,
+        foundItems: true,
+      },
     });
 
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    // Delete avatar if it exists
-    if (user.avatar) {
-      const avatarPath = path.join(
-        __dirname,
-        "../public/uploads/avatar",
-        user.avatar
-      );
-      if (fs.existsSync(avatarPath)) {
-        fs.unlinkSync(avatarPath);
-      }
+    // Check DELETE confirmation text
+    if (deleteConfirmation !== "DELETE") {
+      return res.render("user/delete", {
+        user,
+        title: "Delete Account",
+        error: "You must type DELETE exactly to confirm.",
+      });
     }
 
-    // Delete user from DB
-    await prisma.user.delete({
-      where: { id },
+    // Check password
+    const passwordMatch = await bcrypt.compare(confirmPassword, user.password);
+    if (!passwordMatch) {
+      return res.render("user/delete", {
+        user,
+        title: "Delete Account",
+        error: "Incorrect password.",
+      });
+    }
+
+    // Delete avatar if it exists
+    // if (user.avatar) {
+    //   const avatarPath = path.join(
+    //     __dirname,
+    //     "../public/uploads/avatar",
+    //     user.avatar
+    //   );
+    //   if (fs.existsSync(avatarPath)) {
+    //     fs.unlinkSync(avatarPath);
+    //   }
+    // }
+    // Collect all file paths to delete
+    const filesToDelete = [];
+
+    if (user.avatar) {
+      filesToDelete.push(
+        path.join(__dirname, "../public/uploads/avatar", user.avatar)
+      );
+    }
+
+    user.lostItems.forEach((item) => {
+      (item.images || []).forEach((img) =>
+        filesToDelete.push(
+          path.join(__dirname, "../public/uploads/lost-items", img)
+        )
+      );
     });
+
+    user.foundItems.forEach((item) => {
+      (item.images || []).forEach((img) =>
+        filesToDelete.push(
+          path.join(__dirname, "../public/uploads/found-items", img)
+        )
+      );
+    });
+
+    // Delete user from DB
+    // await prisma.user.delete({
+    //   where: { id },
+    // });
+
+    // Delete from DB in bulk – uses deleteMany instead of looping.
+    await prisma.$transaction([
+      prisma.lostItem.deleteMany({ where: { userId: id } }),
+      prisma.foundItem.deleteMany({ where: { userId: id } }),
+      prisma.user.delete({ where: { id } }),
+    ]);
+
+    // Delete files asynchronously (non-blocking) – no blocking the event loop.
+    await Promise.all(
+      filesToDelete.map(async (filePath) => {
+        try {
+          await fs.unlink(filePath);
+        } catch (err) {
+          if (err.code !== "ENOENT") console.error("File delete error:", err);
+        }
+      })
+    );
 
     // Destroy session after deletion
     req.session.destroy((err) => {

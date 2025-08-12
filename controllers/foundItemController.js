@@ -11,6 +11,7 @@ const VALID_LOCATIONS = [
   "South Yangon",
   "East Yangon",
   "West Yangon",
+  "Other",
 ];
 
 const VALID_CONDITIONS = [
